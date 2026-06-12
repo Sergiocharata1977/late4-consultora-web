@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-inter), sans-serif;
+}
+
+.section-title {
+  @apply text-4xl font-bold text-late4-navy mb-6;
+}
+
+.section-subtitle {
+  @apply text-xl text-late4-gray mb-12 max-w-3xl;
+}
+
+.btn-primary {
+  @apply px-6 py-3 bg-late4-navy text-white rounded transition-colors hover:bg-late4-blue font-medium;
+}
+
+.btn-secondary {
+  @apply px-6 py-3 border-2 border-late4-navy text-late4-navy rounded transition-colors hover:bg-late4-light-gray font-medium;
+}
