@@ -4,7 +4,6 @@ import ProblemSection from '@/components/ProblemSection';
 import ServicesSection from '@/components/ServicesSection';
 import MethodSection from '@/components/MethodSection';
 import SoftwareSection from '@/components/SoftwareSection';
-import ISOSection from '@/components/ISOSection';
 import ContactForm from '@/components/ContactForm';
 import Footer from '@/components/Footer';
 
@@ -17,7 +16,6 @@ export default function Home() {
       <ServicesSection />
       <MethodSection />
       <SoftwareSection />
-      <ISOSection />
 
       <section id="contacto" className="py-20 px-6 bg-late4-light-gray">
         <div className="max-w-2xl mx-auto">

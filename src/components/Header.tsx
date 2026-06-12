@@ -20,9 +20,6 @@ export default function Header() {
           <button onClick={() => scrollToSection('software')} className="text-late4-gray hover:text-late4-navy transition">
             Software
           </button>
-          <button onClick={() => scrollToSection('iso')} className="text-late4-gray hover:text-late4-navy transition">
-            ISO 9001
-          </button>
           <button onClick={() => scrollToSection('contacto')} className="text-late4-gray hover:text-late4-navy transition">
             Contacto
           </button>
