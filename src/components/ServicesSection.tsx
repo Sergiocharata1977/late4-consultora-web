@@ -23,12 +23,12 @@ export default function ServicesSection() {
   ];
 
   return (
-    <section id="servicios" className="bg-late4-blue-deep px-5 py-24 text-white md:px-8">
+    <section id="servicios" className="bg-white px-5 py-24 text-late4-ink md:px-8">
       <div className="mx-auto max-w-7xl">
         <div className="mx-auto mb-14 max-w-3xl text-center">
-          <p className="eyebrow mb-5">Expertise</p>
-          <h2 className="section-title-dark">Diseñamos organizaciones más claras, medibles y digitales</h2>
-          <p className="section-subtitle-dark mx-auto mt-5">
+          <p className="eyebrow mb-5 text-late4-blue">Expertise</p>
+          <h2 className="section-title">Diseñamos organizaciones más claras, medibles y digitales</h2>
+          <p className="section-subtitle mx-auto mt-5">
             Soluciones integrales que combinan la rigurosidad de la norma con la agilidad de la tecnología moderna.
           </p>
         </div>
@@ -37,13 +37,13 @@ export default function ServicesSection() {
           {services.map((service) => {
             const Icon = service.icon;
             return (
-              <article key={service.title} className="glass-card p-7 transition hover:-translate-y-1 hover:border-late4-gold/50">
-                <Icon className="mb-6 text-late4-gold" size={25} />
-                <h3 className="font-editorial mb-4 text-2xl font-bold text-late4-ivory">{service.title}</h3>
-                <p className="mb-6 text-sm leading-relaxed text-white/65">{service.description}</p>
+              <article key={service.title} className="rounded-sm border border-late4-ink/10 bg-late4-paper p-7 transition hover:-translate-y-1 hover:border-late4-blue/30 hover:bg-white">
+                <Icon className="mb-6 text-late4-blue" size={25} />
+                <h3 className="font-editorial mb-4 text-2xl font-bold text-late4-ink">{service.title}</h3>
+                <p className="mb-6 text-sm leading-relaxed text-late4-slate">{service.description}</p>
                 <ul className="space-y-2">
                   {service.points.map((point) => (
-                    <li key={point} className="text-[11px] font-bold uppercase tracking-[0.14em] text-late4-gold">
+                    <li key={point} className="text-[11px] font-bold uppercase tracking-[0.14em] text-late4-blue">
                       + {point}
                     </li>
                   ))}

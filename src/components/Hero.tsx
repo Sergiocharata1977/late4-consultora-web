@@ -36,20 +36,34 @@ export default function Hero() {
         <div className="glass-card mb-2 ml-auto w-full max-w-md p-6">
           <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <span className="flex h-10 w-10 items-center justify-center rounded-sm bg-late4-gold text-late4-ink">
+              <span className="flex h-10 w-10 items-center justify-center rounded-sm bg-white/15 text-late4-blue-bright">
                 <BarChart3 size={20} />
               </span>
               <div>
-                <p className="text-sm font-bold text-late4-ivory">Operational Audit</p>
+                <p className="text-sm font-bold text-late4-ivory">Auditoría operativa</p>
                 <p className="text-xs text-white/55">Eficiencia posterior a Late 4</p>
               </div>
             </div>
-            <ShieldCheck className="text-late4-gold" size={22} />
+            <ShieldCheck className="text-late4-blue-bright" size={22} />
           </div>
+
+          <div className="mb-6 grid grid-cols-3 gap-3">
+            {[
+              { label: 'Procesos', value: '82%' },
+              { label: 'Control', value: '74%' },
+              { label: 'Riesgo', value: '-31%' },
+            ].map((metric) => (
+              <div key={metric.label} className="rounded-sm border border-white/10 bg-white/8 p-3">
+                <p className="text-lg font-bold text-late4-ivory">{metric.value}</p>
+                <p className="mt-1 text-[10px] uppercase tracking-[0.14em] text-white/45">{metric.label}</p>
+              </div>
+            ))}
+          </div>
+
           <div className="flex h-40 items-end gap-3">
             {[42, 58, 47, 92, 55].map((height, index) => (
               <div key={index} className="flex-1 bg-white/25">
-                <div className="bg-late4-gold" style={{ height: `${height}%` }} />
+                <div className="bg-late4-blue-bright" style={{ height: `${height}%` }} />
               </div>
             ))}
           </div>

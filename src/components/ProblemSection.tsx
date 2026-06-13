@@ -19,34 +19,52 @@ export default function ProblemSection() {
           <div className="mt-8 space-y-4">
             {problems.map((problem) => (
               <div key={problem} className="flex items-start gap-3 text-sm text-late4-slate">
-                <AlertTriangle className="mt-0.5 shrink-0 text-late4-gold" size={17} />
+                <AlertTriangle className="mt-0.5 shrink-0 text-late4-blue" size={17} />
                 <span>{problem}</span>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="rounded-sm bg-white p-8 shadow-2xl shadow-late4-blue-deep/10">
+        <div className="rounded-sm bg-white p-8 shadow-xl shadow-late4-blue-deep/8">
           <div className="mb-8 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <span className="flex h-11 w-11 items-center justify-center rounded-sm bg-late4-ink text-late4-gold">
+              <span className="flex h-11 w-11 items-center justify-center rounded-sm bg-late4-blue-deep text-white">
                 <LineChart size={21} />
               </span>
               <div>
-                <p className="font-bold text-late4-ink">Operational Audit</p>
+                <p className="font-bold text-late4-ink">Auditoría operativa</p>
                 <p className="text-sm text-late4-slate">Mapa de eficiencia por área</p>
               </div>
             </div>
-            <Users className="text-late4-gold" />
+            <Users className="text-late4-blue" />
           </div>
-          <div className="flex h-52 items-end gap-4 border-b border-late4-slate/20 pb-2">
-            {[30, 46, 38, 78, 45].map((height, index) => (
-              <div key={index} className="flex-1 bg-late4-slate/30">
-                <div className="bg-late4-gold" style={{ height: `${height}%` }} />
-              </div>
-            ))}
+
+          <div className="grid gap-4 md:grid-cols-[0.85fr_1.15fr]">
+            <div className="space-y-3">
+              {['Administración', 'Calidad', 'Finanzas', 'Operaciones'].map((label, index) => (
+                <div key={label}>
+                  <div className="mb-1 flex justify-between text-xs text-late4-slate">
+                    <span>{label}</span>
+                    <span>{[62, 48, 74, 57][index]}%</span>
+                  </div>
+                  <div className="h-2 bg-late4-paper">
+                    <div className="h-full bg-late4-blue" style={{ width: `${[62, 48, 74, 57][index]}%` }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex h-40 items-end gap-4 border-b border-late4-slate/20 pb-2">
+              {[30, 46, 38, 78, 45].map((height, index) => (
+                <div key={index} className="flex-1 bg-late4-paper">
+                  <div className="bg-late4-blue" style={{ height: `${height}%` }} />
+                </div>
+              ))}
+            </div>
           </div>
-          <p className="mt-4 text-center text-[10px] font-bold uppercase tracking-[0.18em] text-late4-slate">
+
+          <p className="mt-5 text-center text-[10px] font-bold uppercase tracking-[0.18em] text-late4-slate">
             Incremento de eficiencia post-Late 4
           </p>
         </div>
