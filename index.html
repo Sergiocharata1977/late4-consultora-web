@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Late 4 Consultora | Consultoría, Procesos y Tecnología</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&amp;family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .step-number {
+            -webkit-text-stroke: 1px #785a00;
+            color: transparent;
+        }
+        .hover-gold-line:hover {
+            border-top-color: #785a00 !important;
+        }
+        .transition-standard {
+            transition: all 0.3s ease-in-out;
+        }
+        @keyframes slowRotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        .animate-slow-rotate {
+            animation: slowRotate 30s linear infinite;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary": "#ffffff",
+                      "on-secondary-fixed": "#251a00",
+                      "surface-bright": "#f8f9fb",
+                      "white-pure": "#FFFFFF",
+                      "error": "#ba1a1a",
+                      "secondary-container": "#ffd577",
+                      "surface-variant": "#e1e2e4",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary": "#785a00",
+                      "error-container": "#ffdad6",
+                      "primary-fixed": "#d9e2ff",
+                      "primary-container": "#061a40",
+                      "inverse-surface": "#2e3132",
+                      "surface-dim": "#d9dadc",
+                      "on-tertiary-fixed": "#341100",
+                      "surface-container-low": "#f3f4f6",
+                      "surface-container": "#edeef0",
+                      "outline-variant": "#c5c6cf",
+                      "primary": "#000103",
+                      "border-subtle": "#E5E7EB",
+                      "inverse-on-surface": "#f0f1f3",
+                      "on-tertiary-container": "#b27658",
+                      "text-main": "#111827",
+                      "text-muted": "#4B5563",
+                      "tertiary-fixed-dim": "#fcb795",
+                      "on-tertiary-fixed-variant": "#6a3a21",
+                      "tertiary-container": "#351100",
+                      "primary-fixed-dim": "#b5c6f5",
+                      "surface": "#f8f9fb",
+                      "background": "#f8f9fb",
+                      "on-primary-fixed-variant": "#35466e",
+                      "surface-tint": "#4d5e87",
+                      "on-error": "#ffffff",
+                      "on-error-container": "#93000a",
+                      "on-primary-container": "#7383af",
+                      "surface-container-high": "#e7e8ea",
+                      "on-primary": "#ffffff",
+                      "on-surface": "#191c1e",
+                      "on-surface-variant": "#45464e",
+                      "tertiary": "#030000",
+                      "on-secondary-container": "#795a01",
+                      "on-secondary": "#ffffff",
+                      "secondary-fixed": "#ffdf9c",
+                      "tertiary-fixed": "#ffdbcb",
+                      "on-secondary-fixed-variant": "#5b4300",
+                      "on-background": "#191c1e",
+                      "surface-container-highest": "#e1e2e4",
+                      "on-primary-fixed": "#061a40",
+                      "secondary-fixed-dim": "#eac166",
+                      "inverse-primary": "#b5c6f5",
+                      "outline": "#75777f"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "stack-lg": "64px",
+                      "margin-mobile": "20px",
+                      "stack-md": "32px",
+                      "stack-sm": "16px",
+                      "gutter": "32px",
+                      "container-max": "1280px"
+              },
+              "fontFamily": {
+                      "headline-md": ["Source Serif 4"],
+                      "label-sm": ["Inter"],
+                      "body-md": ["Inter"],
+                      "display-lg": ["Source Serif 4"],
+                      "body-lg": ["Inter"],
+                      "display-lg-mobile": ["Source Serif 4"]
+              },
+              "fontSize": {
+                      "headline-md": ["32px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "display-lg": ["56px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "display-lg-mobile": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+      </script>
+</head>
+<body class="bg-surface text-text-main font-body-md selection:bg-secondary-fixed">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-white-pure/90 border-b border-border-subtle backdrop-blur-md">
+<nav class="flex justify-between items-center px-margin-mobile md:px-gutter py-4 max-w-container-max mx-auto">
+<div class="font-headline-md text-headline-md font-bold tracking-tight text-primary">LATE 4</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="font-label-sm text-label-sm text-text-muted hover:text-secondary transition-colors" href="#servicios">Servicios</a>
+<a class="font-label-sm text-label-sm text-text-muted hover:text-secondary transition-colors" href="#metodo">Método</a>
+<a class="font-label-sm text-label-sm text-text-muted hover:text-secondary transition-colors" href="#software">Software</a>
+<a class="font-label-sm text-label-sm text-text-muted hover:text-secondary transition-colors" href="#contacto">Contacto</a>
+</div>
+<a class="bg-primary text-on-primary px-6 py-2 font-label-sm text-label-sm hover:opacity-90 transition-opacity uppercase tracking-widest" href="#contacto">
+                Agendar Consulta
+            </a>
+</nav>
+</header>
+<main>
+<!-- Hero Section -->
+<section class="relative pt-32 pb-24 md:pt-48 md:pb-40 px-margin-mobile md:px-gutter max-w-container-max mx-auto text-center overflow-hidden">
+<!-- Engranaje de fondo animado -->
+<div class="absolute -top-24 -right-32 md:-right-20 md:-top-32 opacity-5 pointer-events-none animate-slow-rotate">
+<svg width="400" height="400" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="gearGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+<stop offset="0%" style="stop-color:#C8A24A;stop-opacity:1" />
+<stop offset="100%" style="stop-color:#785a00;stop-opacity:1" />
+</linearGradient>
+</defs>
+<!-- Círculo central -->
+<circle cx="100" cy="100" r="20" fill="url(#gearGradient)"/>
+<!-- Dientes del engranaje -->
+<g fill="url(#gearGradient)">
+<!-- Diente 1 -->
+<rect x="95" y="15" width="10" height="25" rx="2"/>
+<!-- Diente 2 -->
+<rect x="95" y="160" width="10" height="25" rx="2"/>
+<!-- Diente 3 - rotado 90°-->
+<rect x="15" y="95" width="25" height="10" rx="2"/>
+<!-- Diente 4 - rotado 270° -->
+<rect x="160" y="95" width="25" height="10" rx="2"/>
+<!-- Diente 5 - rotado 45° -->
+<g transform="translate(100, 100) rotate(45) translate(-100, -100)">
+<rect x="95" y="15" width="10" height="25" rx="2"/>
+</g>
+<!-- Diente 6 - rotado 135° -->
+<g transform="translate(100, 100) rotate(135) translate(-100, -100)">
+<rect x="95" y="15" width="10" height="25" rx="2"/>
+</g>
+<!-- Diente 7 - rotado 225° -->
+<g transform="translate(100, 100) rotate(225) translate(-100, -100)">
+<rect x="95" y="15" width="10" height="25" rx="2"/>
+</g>
+<!-- Diente 8 - rotado 315° -->
+<g transform="translate(100, 100) rotate(315) translate(-100, -100)">
+<rect x="95" y="15" width="10" height="25" rx="2"/>
+</g>
+</g>
+<!-- Círculo interior decorativo -->
+<circle cx="100" cy="100" r="28" fill="none" stroke="url(#gearGradient)" stroke-width="1.5" opacity="0.3"/>
+</svg>
+</div>
+
+<div class="max-w-4xl mx-auto relative z-10">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-[0.2em] mb-6 block">Estratégia · Ejecución · Tecnología</span>
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-8">
+                    Consultoría, procesos y tecnología para empresas que necesitan ordenarse y crecer
+                </h1>
+<p class="font-body-lg text-body-lg text-text-muted max-w-2xl mx-auto mb-10 leading-relaxed">
+                    Transformamos organizaciones complejas en estructuras ágiles mediante la estandarización de procesos y la implementación de soluciones digitales a medida.
+                </p>
+<div class="flex flex-col md:flex-row gap-4 justify-center">
+<button class="bg-primary text-on-primary px-10 py-4 font-label-sm text-label-sm uppercase tracking-widest hover:bg-opacity-90 transition-all">
+                        Explorar Soluciones
+                    </button>
+<button class="border border-primary text-primary px-10 py-4 font-label-sm text-label-sm uppercase tracking-widest hover:bg-primary hover:text-on-primary transition-all">
+                        Nuestro Método
+                    </button>
+</div>
+</div>
+<div class="mt-24 border border-border-subtle relative aspect-video md:aspect-[21/9] overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A wide-angle shot of a minimalist, high-end corporate office with clean lines and expansive windows. The lighting is bright and natural, reflecting the sophisticated McKinsey editorial style. The scene is dominated by professional blues and pristine whites, conveying an atmosphere of calm authority and intellectual clarity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkvCFd1PpQe6pUVYxhzWY9L3vAmmakLsyTyEgRtmzi96DTxKmbMn2au1HSdxZGS_6hp3ykKnF_915pdsjOs0ikx-eJrwsu3zjtN8kRo25DQXovIr_n0jQShwKUfPImjX1MnNP87C0xHmH4by4YsOH4jpfJurTAeVWko392zFaHOPEnG-CFQ8XZaf9T9pQchEH0NbprJo4E-OxMK0UG4kD-GazzUrcLbWrO5gWGyf2P0uN3dcjCVzu9eR21AbyO0eilBMM6hALcA89n"/>
+</div>
+</section>
+<!-- Problem Section -->
+<section class="py-stack-lg px-margin-mobile md:px-gutter bg-white-pure">
+<div class="max-w-container-max mx-auto">
+<div class="grid md:grid-cols-2 gap-16 items-start mb-20">
+<h2 class="font-headline-md text-headline-md text-primary leading-tight">
+                        Cuando una empresa crece,<br/>el desorden también crece
+                    </h2>
+<p class="font-body-lg text-body-lg text-text-muted">
+                        El crecimiento sin estructura genera cuellos de botella invisibles. Identificamos los síntomas de la desorganización antes de que comprometan su rentabilidad.
+                    </p>
+</div>
+<div class="grid md:grid-cols-3 gap-8">
+<div class="p-8 border border-border-subtle hover:border-secondary transition-standard">
+<span class="material-symbols-outlined text-secondary mb-6 block text-4xl">person_off</span>
+<h3 class="font-headline-md text-[20px] text-primary mb-4">Tareas que dependen de una sola persona</h3>
+<p class="text-text-muted leading-relaxed">La centralización del conocimiento impide la escalabilidad y genera riesgos operativos críticos.</p>
+</div>
+<div class="p-8 border border-border-subtle hover:border-secondary transition-standard">
+<span class="material-symbols-outlined text-secondary mb-6 block text-4xl">account_tree</span>
+<h3 class="font-headline-md text-[20px] text-primary mb-4">Procesos informales y fragmentados</h3>
+<p class="text-text-muted leading-relaxed">La falta de estandarización resulta en una ejecución inconsistente y pérdida de eficiencia diaria.</p>
+</div>
+<div class="p-8 border border-border-subtle hover:border-secondary transition-standard">
+<span class="material-symbols-outlined text-secondary mb-6 block text-4xl">bar_chart_off</span>
+<h3 class="font-headline-md text-[20px] text-primary mb-4">Falta de datos para decidir</h3>
+<p class="text-text-muted leading-relaxed">Sin métricas claras, la dirección se basa en intuiciones en lugar de evidencias cuantificables.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Services Section -->
+<section class="py-stack-lg px-margin-mobile md:px-gutter bg-surface" id="servicios">
+<div class="max-w-container-max mx-auto">
+<div class="text-center mb-16">
+<h2 class="font-headline-md text-headline-md text-primary mb-4">Diseñamos organizaciones más claras, medibles y digitales</h2>
+<div class="w-24 h-1 bg-secondary mx-auto"></div>
+</div>
+<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Service Card -->
+<div class="bg-white-pure p-8 border border-border-subtle border-t-2 border-t-transparent hover:border-t-secondary hover:shadow-xl transition-all duration-300">
+<h4 class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-4">Estrategia</h4>
+<h3 class="font-headline-md text-[22px] text-primary mb-4">Consultoría administrativa</h3>
+<p class="text-text-muted text-sm leading-relaxed mb-6">Reingeniería de la estructura administrativa para maximizar el control y la rentabilidad.</p>
+<a class="inline-flex items-center text-primary font-semibold text-xs hover:gap-2 transition-all" href="#">SABER MÁS <span class="material-symbols-outlined text-sm ml-1">arrow_forward</span></a>
+</div>
+<!-- Service Card -->
+<div class="bg-white-pure p-8 border border-border-subtle border-t-2 border-t-transparent hover:border-t-secondary hover:shadow-xl transition-all duration-300">
+<h4 class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-4">Calidad</h4>
+<h3 class="font-headline-md text-[22px] text-primary mb-4">Normas ISO 9001</h3>
+<p class="text-text-muted text-sm leading-relaxed mb-6">Implementación de sistemas de gestión de calidad certificados para la excelencia operativa.</p>
+<a class="inline-flex items-center text-primary font-semibold text-xs hover:gap-2 transition-all" href="#">SABER MÁS <span class="material-symbols-outlined text-sm ml-1">arrow_forward</span></a>
+</div>
+<!-- Service Card -->
+<div class="bg-white-pure p-8 border border-border-subtle border-t-2 border-t-transparent hover:border-t-secondary hover:shadow-xl transition-all duration-300">
+<h4 class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-4">Digital</h4>
+<h3 class="font-headline-md text-[22px] text-primary mb-4">Digitalización</h3>
+<p class="text-text-muted text-sm leading-relaxed mb-6">Migración de flujos de trabajo analógicos a plataformas digitales integradas y eficientes.</p>
+<a class="inline-flex items-center text-primary font-semibold text-xs hover:gap-2 transition-all" href="#">SABER MÁS <span class="material-symbols-outlined text-sm ml-1">arrow_forward</span></a>
+</div>
+<!-- Service Card -->
+<div class="bg-white-pure p-8 border border-border-subtle border-t-2 border-t-transparent hover:border-t-secondary hover:shadow-xl transition-all duration-300">
+<h4 class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-4">Futuro</h4>
+<h3 class="font-headline-md text-[22px] text-primary mb-4">Inteligencia Artificial</h3>
+<p class="text-text-muted text-sm leading-relaxed mb-6">Implementación de agentes inteligentes para automatizar la atención y el análisis de datos.</p>
+<a class="inline-flex items-center text-primary font-semibold text-xs hover:gap-2 transition-all" href="#">SABER MÁS <span class="material-symbols-outlined text-sm ml-1">arrow_forward</span></a>
+</div>
+</div>
+</div>
+</section>
+<!-- Method Section -->
+<section class="py-stack-lg px-margin-mobile md:px-gutter bg-primary text-on-primary" id="metodo">
+<div class="max-w-container-max mx-auto">
+<div class="max-w-3xl mb-20">
+<h2 class="font-headline-md text-headline-md mb-6">Un método simple para transformar la gestión</h2>
+<p class="font-body-lg text-body-lg text-on-primary-container">Nuestra metodología de cinco etapas asegura que cada cambio sea sostenible y genere valor real desde la primera semana.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-5 gap-8">
+<div class="group">
+<div class="step-number text-5xl font-bold mb-6 group-hover:text-secondary-fixed transition-colors">01</div>
+<h4 class="font-label-sm text-label-sm uppercase mb-3 text-secondary-fixed">Diagnóstico</h4>
+<p class="text-on-primary-container text-sm leading-relaxed">Entendemos la realidad actual y detectamos fugas de eficiencia.</p>
+</div>
+<div class="group">
+<div class="step-number text-5xl font-bold mb-6 group-hover:text-secondary-fixed transition-colors">02</div>
+<h4 class="font-label-sm text-label-sm uppercase mb-3 text-secondary-fixed">Diseño</h4>
+<p class="text-on-primary-container text-sm leading-relaxed">Modelamos los nuevos procesos y la arquitectura tecnológica.</p>
+</div>
+<div class="group">
+<div class="step-number text-5xl font-bold mb-6 group-hover:text-secondary-fixed transition-colors">03</div>
+<h4 class="font-label-sm text-label-sm uppercase mb-3 text-secondary-fixed">Ejecución</h4>
+<p class="text-on-primary-container text-sm leading-relaxed">Implementamos las soluciones acompañando al equipo humano.</p>
+</div>
+<div class="group">
+<div class="step-number text-5xl font-bold mb-6 group-hover:text-secondary-fixed transition-colors">04</div>
+<h4 class="font-label-sm text-label-sm uppercase mb-3 text-secondary-fixed">Medición</h4>
+<p class="text-on-primary-container text-sm leading-relaxed">Establecemos KPIs para monitorear el impacto de las mejoras.</p>
+</div>
+<div class="group">
+<div class="step-number text-5xl font-bold mb-6 group-hover:text-secondary-fixed transition-colors">05</div>
+<h4 class="font-label-sm text-label-sm uppercase mb-3 text-secondary-fixed">Evolución</h4>
+<p class="text-on-primary-container text-sm leading-relaxed">Ajustes continuos para escalar la organización con éxito.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Software Section -->
+<section class="py-stack-lg px-margin-mobile md:px-gutter bg-white-pure" id="software">
+<div class="max-w-container-max mx-auto">
+<div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+<div class="max-w-2xl">
+<h2 class="font-headline-md text-headline-md text-primary mb-4">Consultoría que también construye software</h2>
+<p class="font-body-lg text-body-lg text-text-muted">Desarrollamos herramientas propietarias diseñadas específicamente para resolver los retos operativos de nuestros clientes.</p>
+</div>
+<div class="flex gap-4">
+<button class="p-2 border border-border-subtle rounded-full hover:bg-surface transition-colors">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="p-2 border border-border-subtle rounded-full hover:bg-surface transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+<!-- Product Card -->
+<div class="bg-surface p-6 flex flex-col justify-between aspect-square border border-border-subtle hover:bg-white-pure transition-standard group">
+<div>
+<span class="material-symbols-outlined text-secondary mb-4">psychology</span>
+<h3 class="font-headline-md text-lg text-primary mb-2">Don Cándido IA</h3>
+<p class="text-xs text-text-muted">Asistente inteligente para la gestión de conocimiento interno.</p>
+</div>
+<span class="material-symbols-outlined self-end opacity-0 group-hover:opacity-100 transition-opacity">arrow_outward</span>
+</div>
+<!-- Product Card -->
+<div class="bg-surface p-6 flex flex-col justify-between aspect-square border border-border-subtle hover:bg-white-pure transition-standard group">
+<div>
+<span class="material-symbols-outlined text-secondary mb-4">payments</span>
+<h3 class="font-headline-md text-lg text-primary mb-2">Financiación</h3>
+<p class="text-xs text-text-muted">Sistema integral para el control de carteras y préstamos.</p>
+</div>
+<span class="material-symbols-outlined self-end opacity-0 group-hover:opacity-100 transition-opacity">arrow_outward</span>
+</div>
+<!-- Product Card -->
+<div class="bg-surface p-6 flex flex-col justify-between aspect-square border border-border-subtle hover:bg-white-pure transition-standard group">
+<div>
+<span class="material-symbols-outlined text-secondary mb-4">hub</span>
+<h3 class="font-headline-md text-lg text-primary mb-2">CRM</h3>
+<p class="text-xs text-text-muted">Gestión de relaciones comerciales y pipeline de ventas.</p>
+</div>
+<span class="material-symbols-outlined self-end opacity-0 group-hover:opacity-100 transition-opacity">arrow_outward</span>
+</div>
+<!-- Product Card -->
+<div class="bg-surface p-6 flex flex-col justify-between aspect-square border border-border-subtle hover:bg-white-pure transition-standard group">
+<div>
+<span class="material-symbols-outlined text-secondary mb-4">agriculture</span>
+<h3 class="font-headline-md text-lg text-primary mb-2">AgroCredit</h3>
+<p class="text-xs text-text-muted">Herramienta de análisis de riesgo para el sector agropecuario.</p>
+</div>
+<span class="material-symbols-outlined self-end opacity-0 group-hover:opacity-100 transition-opacity">arrow_outward</span>
+</div>
+<!-- Product Card -->
+<div class="bg-surface p-6 flex flex-col justify-between aspect-square border border-border-subtle hover:bg-white-pure transition-standard group">
+<div>
+<span class="material-symbols-outlined text-secondary mb-4">calendar_month</span>
+<h3 class="font-headline-md text-lg text-primary mb-2">Turnos</h3>
+<p class="text-xs text-text-muted">Plataforma de agendamiento y gestión de citas automatizada.</p>
+</div>
+<span class="material-symbols-outlined self-end opacity-0 group-hover:opacity-100 transition-opacity">arrow_outward</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Contact Section -->
+<section class="py-stack-lg px-margin-mobile md:px-gutter bg-surface-container-low" id="contacto">
+<div class="max-w-4xl mx-auto">
+<div class="bg-white-pure border border-border-subtle p-8 md:p-16 shadow-sm">
+<div class="text-center mb-12">
+<h2 class="font-headline-md text-headline-md text-primary mb-4">Empecemos por entender cómo funciona tu empresa</h2>
+<p class="text-text-muted">Completa el formulario y un consultor senior se pondrá en contacto en menos de 24 horas.</p>
+</div>
+<form class="space-y-6">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div>
+<label class="font-label-sm text-label-sm uppercase text-text-muted block mb-2">Nombre Completo</label>
+<input class="w-full border-0 border-b border-outline-variant bg-transparent py-3 focus:ring-0 focus:border-primary transition-colors" placeholder="Ej. Juan Pérez" type="text"/>
+</div>
+<div>
+<label class="font-label-sm text-label-sm uppercase text-text-muted block mb-2">Empresa</label>
+<input class="w-full border-0 border-b border-outline-variant bg-transparent py-3 focus:ring-0 focus:border-primary transition-colors" placeholder="Nombre de tu organización" type="text"/>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div>
+<label class="font-label-sm text-label-sm uppercase text-text-muted block mb-2">Email Corporativo</label>
+<input class="w-full border-0 border-b border-outline-variant bg-transparent py-3 focus:ring-0 focus:border-primary transition-colors" placeholder="juan@empresa.com" type="email"/>
+</div>
+<div>
+<label class="font-label-sm text-label-sm uppercase text-text-muted block mb-2">Cargo</label>
+<input class="w-full border-0 border-b border-outline-variant bg-transparent py-3 focus:ring-0 focus:border-primary transition-colors" placeholder="Ej. Director General" type="text"/>
+</div>
+</div>
+<div>
+<label class="font-label-sm text-label-sm uppercase text-text-muted block mb-2">¿Cuál es tu mayor desafío actual?</label>
+<textarea class="w-full border-0 border-b border-outline-variant bg-transparent py-3 focus:ring-0 focus:border-primary transition-colors resize-none" placeholder="Describe brevemente tus objetivos de orden y crecimiento..." rows="4"></textarea>
+</div>
+<div class="text-center pt-8">
+<button class="bg-primary text-on-primary px-12 py-4 font-label-sm text-label-sm uppercase tracking-widest hover:bg-opacity-90 transition-all w-full md:w-auto" type="submit">
+                                Enviar Solicitud
+                            </button>
+</div>
+</form>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest border-t border-border-subtle">
+<div class="flex flex-col md:flex-row justify-between items-center px-margin-mobile md:px-gutter py-stack-md max-w-container-max mx-auto">
+<div class="mb-6 md:mb-0">
+<span class="font-headline-md text-headline-md font-bold text-primary">LATE 4</span>
+<p class="font-label-sm text-label-sm text-text-muted mt-2">Consultoría Estratégica &amp; Software</p>
+</div>
+<div class="flex flex-col md:flex-row items-center gap-6">
+<nav class="flex gap-6">
+<a class="font-label-sm text-label-sm text-text-muted hover:text-secondary underline transition-all" href="#">Privacidad</a>
+<a class="font-label-sm text-label-sm text-text-muted hover:text-secondary underline transition-all" href="#">Términos</a>
+<a class="font-label-sm text-label-sm text-text-muted hover:text-secondary underline transition-all" href="#">LinkedIn</a>
+<a class="font-label-sm text-label-sm text-text-muted hover:text-secondary underline transition-all" href="#">Contacto</a>
+</nav>
+</div>
+</div>
+<div class="border-t border-border-subtle py-6">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-gutter text-center md:text-left">
+<p class="font-label-sm text-label-sm text-text-muted opacity-80">© 2024 Late 4 Consultora. Todos los derechos reservados.</p>
+</div>
+</div>
+</footer>
+<script>
+        // Simple Intersection Observer for scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-8');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('section > div').forEach(el => {
+            el.classList.add('transition-all', 'duration-1000', 'opacity-0', 'translate-y-8');
+            observer.observe(el);
+        });
+    </script>
+</body></html>
