@@ -3,8 +3,6 @@
 @tailwind utilities;
 
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
 }
 
@@ -13,21 +11,42 @@ html {
 }
 
 body {
+  margin: 0;
   font-family: var(--font-inter), sans-serif;
 }
 
+.font-editorial {
+  font-family: var(--font-serif), serif;
+}
+
 .section-title {
-  @apply text-4xl font-bold text-late4-navy mb-6;
+  @apply font-editorial text-4xl font-bold leading-tight text-late4-ink md:text-5xl;
+}
+
+.section-title-dark {
+  @apply font-editorial text-4xl font-bold leading-tight text-late4-ivory md:text-5xl;
 }
 
 .section-subtitle {
-  @apply text-xl text-late4-gray mb-12 max-w-3xl;
+  @apply max-w-3xl text-base leading-relaxed text-late4-slate md:text-lg;
+}
+
+.section-subtitle-dark {
+  @apply max-w-3xl text-base leading-relaxed text-white/70 md:text-lg;
+}
+
+.eyebrow {
+  @apply text-xs font-bold uppercase tracking-[0.22em] text-late4-gold;
 }
 
 .btn-primary {
-  @apply px-6 py-3 bg-late4-navy text-white rounded transition-colors hover:bg-late4-blue font-medium;
+  @apply inline-flex items-center justify-center rounded-sm bg-late4-gold px-6 py-3 text-sm font-bold text-late4-ink transition hover:bg-late4-gold-light;
 }
 
 .btn-secondary {
-  @apply px-6 py-3 border-2 border-late4-navy text-late4-navy rounded transition-colors hover:bg-late4-light-gray font-medium;
+  @apply inline-flex items-center justify-center rounded-sm border border-white/30 bg-white/10 px-6 py-3 text-sm font-bold text-white backdrop-blur transition hover:border-late4-gold hover:bg-white/15;
+}
+
+.glass-card {
+  @apply rounded-sm border border-white/10 bg-white/[0.07] shadow-2xl shadow-black/20 backdrop-blur-md;
 }

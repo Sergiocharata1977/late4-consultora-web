@@ -1,22 +1,56 @@
+import { Briefcase, Cog, Rocket } from 'lucide-react';
+
 export default function ServicesSection() {
   const services = [
-    { title: 'Consultoría administrativa', description: 'Ordenamos circuitos administrativos, responsabilidades, controles y operaciones internas.' },
-    { title: 'Normas de calidad ISO 9001', description: 'Implementamos sistemas de gestión basados en procesos, documentación y auditorías.' },
-    { title: 'Digitalización y software', description: 'Diseñamos herramientas digitales adaptadas: tableros, formularios y sistemas internos.' },
-    { title: 'IA aplicada a la gestión', description: 'Incorporamos inteligencia artificial para análisis de procesos y generación de reportes.' },
+    {
+      icon: Briefcase,
+      title: 'Administración',
+      description: 'Estructuramos tu back-office para que sea el motor de la empresa, no el freno.',
+      points: ['Control financiero', 'Flujo de caja', 'Reporting'],
+    },
+    {
+      icon: Cog,
+      title: 'ISO 9001',
+      description: 'Certificación y mantenimiento de estándares de calidad con enfoque práctico y real.',
+      points: ['Auditorías', 'Mapa de procesos', 'Mejora continua'],
+    },
+    {
+      icon: Rocket,
+      title: 'Escalabilidad',
+      description: 'Sistemas diseñados para absorber el crecimiento sin comprometer la calidad del servicio.',
+      points: ['Automatización', 'KPI en tiempo real', 'Cultura de datos'],
+    },
   ];
 
   return (
-    <section id="servicios" className="py-20 px-6 bg-late4-light-gray">
-      <div className="max-w-6xl mx-auto">
-        <h2 className="section-title">Diseñamos organizaciones más claras, medibles y digitales</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {services.map((service) => (
-            <div key={service.title} className="bg-white p-8 rounded border border-late4-light-gray">
-              <h3 className="text-xl font-bold text-late4-navy mb-4">{service.title}</h3>
-              <p className="text-late4-gray leading-relaxed">{service.description}</p>
-            </div>
-          ))}
+    <section id="servicios" className="bg-black px-5 py-24 text-white md:px-8">
+      <div className="mx-auto max-w-7xl">
+        <div className="mx-auto mb-14 max-w-3xl text-center">
+          <p className="eyebrow mb-5">Expertise</p>
+          <h2 className="section-title-dark">Diseñamos organizaciones más claras, medibles y digitales</h2>
+          <p className="section-subtitle-dark mx-auto mt-5">
+            Soluciones integrales que combinan la rigurosidad de la norma con la agilidad de la tecnología moderna.
+          </p>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-3">
+          {services.map((service) => {
+            const Icon = service.icon;
+            return (
+              <article key={service.title} className="glass-card p-7 transition hover:-translate-y-1 hover:border-late4-gold/50">
+                <Icon className="mb-6 text-late4-gold" size={25} />
+                <h3 className="font-editorial mb-4 text-2xl font-bold text-late4-ivory">{service.title}</h3>
+                <p className="mb-6 text-sm leading-relaxed text-white/65">{service.description}</p>
+                <ul className="space-y-2">
+                  {service.points.map((point) => (
+                    <li key={point} className="text-[11px] font-bold uppercase tracking-[0.14em] text-late4-gold">
+                      + {point}
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>

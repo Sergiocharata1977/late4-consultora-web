@@ -1,32 +1,29 @@
 'use client';
 
+import { ArrowRight } from 'lucide-react';
+
 export default function Header() {
   const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    element?.scrollIntoView({ behavior: 'smooth' });
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
-    <header className="fixed top-0 w-full bg-white border-b border-late4-light-gray z-50">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        <div className="text-2xl font-bold text-late4-navy">
-          Late 4<span className="text-late4-gold">.</span>
-        </div>
+    <header className="fixed top-0 z-50 w-full border-b border-white/10 bg-late4-ink/80 backdrop-blur-xl">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 md:px-8">
+        <button onClick={() => scrollToSection('inicio')} className="font-editorial text-xl font-bold tracking-wide text-late4-ivory">
+          LATE 4
+        </button>
 
-        <nav className="hidden md:flex items-center gap-8">
-          <button onClick={() => scrollToSection('servicios')} className="text-late4-gray hover:text-late4-navy transition">
-            Servicios
-          </button>
-          <button onClick={() => scrollToSection('software')} className="text-late4-gray hover:text-late4-navy transition">
-            Software
-          </button>
-          <button onClick={() => scrollToSection('contacto')} className="text-late4-gray hover:text-late4-navy transition">
-            Contacto
-          </button>
+        <nav className="hidden items-center gap-8 text-[11px] font-bold uppercase tracking-[0.18em] text-white/65 md:flex">
+          <button onClick={() => scrollToSection('servicios')} className="transition hover:text-late4-gold">Expertise</button>
+          <button onClick={() => scrollToSection('metodo')} className="transition hover:text-late4-gold">Método</button>
+          <button onClick={() => scrollToSection('software')} className="transition hover:text-late4-gold">Software</button>
+          <button onClick={() => scrollToSection('contacto')} className="transition hover:text-late4-gold">Contacto</button>
         </nav>
 
-        <button onClick={() => scrollToSection('contacto')} className="btn-primary text-sm">
-          Solicitar diagnóstico
+        <button onClick={() => scrollToSection('contacto')} className="hidden items-center gap-2 rounded-sm bg-late4-ivory px-4 py-2 text-xs font-bold text-late4-ink transition hover:bg-late4-gold md:inline-flex">
+          Get started
+          <ArrowRight size={14} />
         </button>
       </div>
     </header>

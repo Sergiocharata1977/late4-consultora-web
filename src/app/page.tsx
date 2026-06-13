@@ -17,18 +17,19 @@ export default function Home() {
       <MethodSection />
       <SoftwareSection />
 
-      <section id="contacto" className="py-20 px-6 bg-late4-light-gray">
-        <div className="max-w-2xl mx-auto">
-          <h2 className="section-title text-center">Empecemos por entender cómo funciona tu empresa</h2>
-          <p className="section-subtitle text-center">Podemos ayudarte a detectar problemas de organización, procesos críticos y oportunidades de digitalización.</p>
-          <div className="bg-white p-8 rounded mb-12">
-            <ContactForm />
-          </div>
-          <div className="text-center space-y-4">
-            <p className="text-late4-navy font-semibold">O contáctanos directamente:</p>
-            <p className="text-late4-gray">contacto@late4.com</p>
-            <p className="text-late4-gray">WhatsApp: +54 9 362 4xxxxxx</p>
-          </div>
+      <section id="contacto" className="bg-late4-paper px-5 py-24 text-late4-ink md:px-8">
+        <div className="mx-auto max-w-3xl text-center">
+          <p className="eyebrow mb-5">Primer paso</p>
+          <h2 className="font-editorial text-4xl font-bold leading-tight md:text-5xl">
+            Empecemos por entender cómo funciona tu empresa
+          </h2>
+          <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-late4-slate md:text-base">
+            Agenda una llamada estratégica de 15 minutos para identificar tus cuellos de botella actuales.
+          </p>
+        </div>
+
+        <div className="mx-auto mt-12 max-w-xl rounded-sm border border-late4-ink/10 bg-white p-6 shadow-2xl shadow-late4-blue-deep/10 md:p-8">
+          <ContactForm />
         </div>
       </section>
 

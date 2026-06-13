@@ -1,35 +1,37 @@
+import { Instagram, Linkedin } from 'lucide-react';
+
 export default function Footer() {
   return (
-    <footer className="bg-late4-navy text-late4-light-gray py-12 px-6">
-      <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-          <div>
-            <div className="text-2xl font-bold mb-2">Late 4<span className="text-late4-gold">.</span></div>
-            <p className="text-sm text-gray-300">Consultoría, procesos y tecnología para empresas en crecimiento.</p>
-          </div>
-          <div>
-            <h4 className="font-semibold mb-4">Empresa</h4>
-            <ul className="space-y-2 text-sm text-gray-300">
-              <li><a href="#servicios" className="hover:text-late4-gold transition">Servicios</a></li>
-              <li><a href="#software" className="hover:text-late4-gold transition">Software</a></li>
-              <li><a href="#iso" className="hover:text-late4-gold transition">ISO 9001</a></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-semibold mb-4">Contacto</h4>
-            <ul className="space-y-2 text-sm text-gray-300">
-              <li>contacto@late4.com</li>
-              <li>+54 9 362 4xxxxxx</li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-semibold mb-4">Ubicación</h4>
-            <p className="text-sm text-gray-300">Charata, Chaco, Argentina</p>
+    <footer className="bg-[#DDE1E7] px-5 py-14 text-late4-ink md:px-8">
+      <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+        <div>
+          <div className="font-editorial mb-3 text-2xl font-bold tracking-wide">LATE 4</div>
+          <p className="max-w-xs text-sm leading-relaxed text-late4-slate">
+            Ingeniería de procesos y consultoría estratégica para el mercado hispanohablante.
+          </p>
+          <div className="mt-6 flex gap-3">
+            <span className="flex h-8 w-8 items-center justify-center rounded-full border border-late4-ink/15"><Instagram size={15} /></span>
+            <span className="flex h-8 w-8 items-center justify-center rounded-full border border-late4-ink/15"><Linkedin size={15} /></span>
           </div>
         </div>
-        <div className="border-t border-late4-blue pt-8">
-          <p className="text-center text-sm text-gray-300">© 2024 Late 4 Consultora. Todos los derechos reservados.</p>
-        </div>
+
+        {[
+          { title: 'Servicios', links: ['ISO 9001', 'Digitalización', 'Finanzas'] },
+          { title: 'Empresa', links: ['SME Solutions', 'Contact', 'Case Studies'] },
+          { title: 'Legal', links: ['Privacy Policy', 'Terms of Service', 'ISO Compliance'] },
+        ].map((group) => (
+          <div key={group.title}>
+            <h4 className="mb-4 text-xs font-bold uppercase tracking-[0.18em] text-late4-ink">{group.title}</h4>
+            <ul className="space-y-3 text-sm text-late4-slate">
+              {group.links.map((link) => (
+                <li key={link}>{link}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+      <div className="mx-auto mt-14 max-w-7xl border-t border-late4-ink/10 pt-7 text-center text-xs text-late4-slate">
+        © 2024 Late 4 Consultora. Strategic Operational Excellence.
       </div>
     </footer>
   );

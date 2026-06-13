@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { Send } from 'lucide-react';
 import { db } from '@/lib/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
@@ -15,6 +16,8 @@ export default function ContactForm() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+
+  const fieldClass = 'w-full rounded-sm border border-late4-ink/10 bg-late4-paper px-4 py-3 text-sm text-late4-ink outline-none transition placeholder:text-late4-slate/70 focus:border-late4-gold focus:bg-white';
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -51,19 +54,20 @@ export default function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <input type="text" name="name" placeholder="Tu nombre" value={formData.name} onChange={handleChange} className="w-full px-4 py-3 border border-late4-light-gray rounded focus:outline-none focus:border-late4-navy" required />
-        <input type="text" name="company" placeholder="Empresa" value={formData.company} onChange={handleChange} className="w-full px-4 py-3 border border-late4-light-gray rounded focus:outline-none focus:border-late4-navy" />
+      <div className="grid gap-4 md:grid-cols-2">
+        <input type="text" name="name" placeholder="Juan Pérez" value={formData.name} onChange={handleChange} className={fieldClass} required />
+        <input type="text" name="company" placeholder="Cía. S.A." value={formData.company} onChange={handleChange} className={fieldClass} />
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} className="w-full px-4 py-3 border border-late4-light-gray rounded focus:outline-none focus:border-late4-navy" required />
-        <input type="tel" name="phone" placeholder="Teléfono / WhatsApp" value={formData.phone} onChange={handleChange} className="w-full px-4 py-3 border border-late4-light-gray rounded focus:outline-none focus:border-late4-navy" />
+      <div className="grid gap-4 md:grid-cols-2">
+        <input type="email" name="email" placeholder="juan@empresa.com" value={formData.email} onChange={handleChange} className={fieldClass} required />
+        <input type="tel" name="phone" placeholder="Teléfono / WhatsApp" value={formData.phone} onChange={handleChange} className={fieldClass} />
       </div>
-      <textarea name="message" placeholder="Cuéntanos sobre tu situación" rows={5} value={formData.message} onChange={handleChange} className="w-full px-4 py-3 border border-late4-light-gray rounded focus:outline-none focus:border-late4-navy" required></textarea>
-      {error && <p className="text-red-600 text-sm">{error}</p>}
-      {success && <p className="text-green-600 text-sm">✓ Mensaje enviado. Te contactaremos pronto.</p>}
-      <button type="submit" disabled={loading} className="btn-primary w-full">
-        {loading ? 'Enviando...' : 'Enviar'}
+      <textarea name="message" placeholder="Cuéntanos brevemente tus desafíos..." rows={5} value={formData.message} onChange={handleChange} className={fieldClass} required />
+      {error && <p className="text-sm font-medium text-red-600">{error}</p>}
+      {success && <p className="text-sm font-medium text-green-700">Mensaje enviado. Te contactaremos pronto.</p>}
+      <button type="submit" disabled={loading} className="btn-primary w-full gap-2 disabled:cursor-not-allowed disabled:opacity-70">
+        {loading ? 'Enviando...' : 'Enviar solicitud'}
+        <Send size={15} />
       </button>
     </form>
   );
