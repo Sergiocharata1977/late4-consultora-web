@@ -1,18 +1,28 @@
 export default function Hero() {
   return (
-    <section className="pt-32 pb-20 px-6 bg-late4-light-gray relative overflow-hidden">
-      {/* Engranaje animado de fondo */}
-      <div className="absolute -top-24 -right-32 md:-right-20 md:-top-32 opacity-5 pointer-events-none animate-spin" style={{ animationDuration: '30s' }}>
-        <svg width="400" height="400" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <section className="relative overflow-hidden bg-late4-light-gray px-6 pb-20 pt-32 md:pb-28 md:pt-40">
+      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+        <div className="absolute -right-28 -top-20 h-96 w-96 rounded-full border border-late4-gold/20 bg-white/30 blur-sm" />
+        <div className="absolute left-6 top-20 hidden h-24 w-24 border-l-2 border-t-2 border-late4-gold/30 md:block" />
+      </div>
+
+      <div
+        className="pointer-events-none absolute -right-28 top-16 opacity-20 md:-right-8 md:top-20"
+        aria-hidden="true"
+      >
+        <svg
+          className="h-[360px] w-[360px] animate-spin md:h-[520px] md:w-[520px]"
+          style={{ animationDuration: '36s' }}
+          viewBox="0 0 200 200"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <defs>
             <linearGradient id="gearGradient" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" style={{ stopColor: '#C8A24A', stopOpacity: 1 }} />
               <stop offset="100%" style={{ stopColor: '#785a00', stopOpacity: 1 }} />
             </linearGradient>
           </defs>
-          {/* Círculo central */}
-          <circle cx="100" cy="100" r="20" fill="url(#gearGradient)" />
-          {/* Dientes del engranaje */}
+          <circle cx="100" cy="100" r="21" fill="url(#gearGradient)" />
           <g fill="url(#gearGradient)">
             <rect x="95" y="15" width="10" height="25" rx="2" />
             <rect x="95" y="160" width="10" height="25" rx="2" />
@@ -31,23 +41,24 @@ export default function Hero() {
               <rect x="95" y="15" width="10" height="25" rx="2" />
             </g>
           </g>
-          {/* Círculo interior decorativo */}
-          <circle cx="100" cy="100" r="28" fill="none" stroke="url(#gearGradient)" strokeWidth="1.5" opacity="0.3" />
+          <circle cx="100" cy="100" r="58" fill="none" stroke="url(#gearGradient)" strokeWidth="14" opacity="0.25" />
+          <circle cx="100" cy="100" r="38" fill="none" stroke="url(#gearGradient)" strokeWidth="4" opacity="0.55" />
+          <circle cx="100" cy="100" r="28" fill="none" stroke="url(#gearGradient)" strokeWidth="1.5" opacity="0.6" />
         </svg>
       </div>
 
-      <div className="max-w-4xl mx-auto text-center relative z-10">
-        <h1 className="text-5xl md:text-6xl font-bold text-late4-navy mb-6 leading-tight">
+      <div className="relative z-10 mx-auto max-w-4xl text-center">
+        <h1 className="mb-6 text-5xl font-bold leading-tight text-late4-navy md:text-6xl">
           Consultoría, procesos y tecnología para empresas que necesitan ordenarse y crecer
         </h1>
-        <p className="text-lg text-late4-gray mb-12 leading-relaxed">
+        <p className="mb-12 text-lg leading-relaxed text-late4-gray">
           Ayudamos a PyMEs y empresas en crecimiento a profesionalizar su gestión, documentar procesos, implementar normas de calidad e implementar sistemas digitales.
         </p>
-        <div className="flex gap-4 justify-center flex-wrap">
+        <div className="flex flex-wrap justify-center gap-4">
           <button className="btn-primary">Solicitar diagnóstico</button>
           <button className="btn-secondary">Ver servicios</button>
         </div>
-        <p className="mt-12 text-late4-gray italic text-lg">
+        <p className="mt-12 text-lg italic text-late4-gray">
           Procesos claros. Responsables definidos. Información confiable. Mejora continua.
         </p>
       </div>
