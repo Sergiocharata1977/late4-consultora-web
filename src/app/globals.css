@@ -48,5 +48,5 @@ body {
 }
 
 .glass-card {
-  @apply rounded-sm border border-white/10 bg-white/[0.07] shadow-2xl shadow-black/20 backdrop-blur-md;
+  @apply rounded-sm border border-white/10 bg-white/[0.07] shadow-2xl shadow-late4-blue-deep/25 backdrop-blur-md;
 }

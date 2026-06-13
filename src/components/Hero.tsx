@@ -16,9 +16,12 @@ export default function Hero() {
             IA nativa & estrategia
           </div>
           <h1 className="font-editorial text-5xl font-bold leading-[0.95] text-late4-ivory md:text-7xl">
-            Consultoría, procesos y tecnología para empresas que necesitan ordenarse y crecer.
+            Consultoría en procesos y tecnología
           </h1>
-          <p className="mt-7 max-w-xl text-base leading-relaxed text-white/78">
+          <p className="mt-7 max-w-2xl font-editorial text-2xl font-semibold leading-tight text-white/88 md:text-4xl">
+            El reto: ordenar la empresa para que pueda crecer sin perder precisión.
+          </p>
+          <p className="mt-5 max-w-xl text-base leading-relaxed text-white/72">
             Transformamos el caos operativo en sistemas de alta precisión diseñados para la escalabilidad y la excelencia estratégica.
           </p>
           <div className="mt-9 flex flex-wrap gap-4">

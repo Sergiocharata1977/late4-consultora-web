@@ -7,7 +7,7 @@ export default function SoftwareSection() {
   ];
 
   return (
-    <section id="software" className="bg-black px-5 py-24 text-white md:px-8">
+    <section id="software" className="bg-late4-blue-deep px-5 py-24 text-white md:px-8">
       <div className="mx-auto grid max-w-7xl gap-14 md:grid-cols-[0.9fr_1.1fr] md:items-center">
         <div className="overflow-hidden rounded-sm border border-white/10 bg-late4-ink p-8 shadow-2xl shadow-late4-blue-bright/10">
           <div className="rounded-sm border border-late4-blue-bright/20 bg-[radial-gradient(circle_at_top_left,rgba(29,142,216,0.35),rgba(3,11,24,0.98)_62%)] p-6">
@@ -16,7 +16,7 @@ export default function SoftwareSection() {
               <span className="text-xs font-bold uppercase tracking-[0.18em] text-white/55">Command center</span>
             </div>
             <div className="grid gap-4 md:grid-cols-[1.3fr_0.7fr]">
-              <div className="rounded-sm border border-white/10 bg-black/30 p-4">
+              <div className="rounded-sm border border-white/10 bg-late4-blue-deep/55 p-4">
                 <div className="mb-4 h-36 rounded-sm bg-[linear-gradient(135deg,rgba(29,142,216,0.55),rgba(200,162,74,0.28))]" />
                 <div className="space-y-2">
                   <div className="h-2 w-3/4 bg-white/20" />

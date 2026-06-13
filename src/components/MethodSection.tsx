@@ -18,7 +18,7 @@ export default function MethodSection() {
           </p>
           <div className="mt-10 overflow-hidden rounded-sm border border-late4-ink/10 bg-late4-ink p-4 shadow-2xl shadow-late4-blue-deep/20">
             <div className="h-56 rounded-sm border border-white/10 bg-[radial-gradient(circle_at_center,rgba(29,142,216,0.28),rgba(3,11,24,0.95)_58%)] p-6">
-              <div className="h-full rounded-sm border border-late4-gold/20 bg-black/40 p-5">
+              <div className="h-full rounded-sm border border-late4-gold/20 bg-late4-blue-deep/70 p-5">
                 <div className="mb-4 h-3 w-24 rounded-full bg-white/20" />
                 <div className="space-y-3">
                   <div className="h-3 w-full bg-late4-blue-bright/30" />
