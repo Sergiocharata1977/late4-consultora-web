@@ -8,7 +8,7 @@ export default function SoftwareSection() {
 
   return (
     <section id="software" className="bg-white px-5 py-24 text-late4-ink md:px-8">
-      <div className="mx-auto grid max-w-7xl gap-14 md:grid-cols-[0.9fr_1.1fr] md:items-center">
+      <div className="site-container grid gap-14 md:grid-cols-[0.9fr_1.1fr] md:items-center">
         <div className="overflow-hidden rounded-sm border border-late4-ink/10 bg-late4-paper p-8 shadow-xl shadow-late4-blue-deep/8">
           <div className="rounded-sm border border-late4-blue/15 bg-white p-6">
             <div className="mb-6 flex items-center gap-3">

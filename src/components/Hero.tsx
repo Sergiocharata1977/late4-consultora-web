@@ -10,7 +10,7 @@ export default function Hero() {
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(3,11,24,0.95)_0%,rgba(3,11,24,0.78)_34%,rgba(3,11,24,0.32)_68%,rgba(3,11,24,0.72)_100%)]" aria-hidden="true" />
       <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-late4-ink to-transparent" aria-hidden="true" />
 
-      <div className="relative z-10 mx-auto grid max-w-7xl gap-12 pb-20 md:grid-cols-[1.05fr_0.95fr] md:items-end">
+      <div className="site-container relative z-10 grid gap-12 pb-20 md:grid-cols-[1.05fr_0.95fr] md:items-end">
         <div className="max-w-3xl pt-10 md:pt-20">
           <div className="mb-6 inline-flex items-center border border-late4-gold/40 bg-late4-gold/15 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-late4-gold">
             IA nativa & estrategia

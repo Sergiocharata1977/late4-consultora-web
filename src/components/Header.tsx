@@ -9,7 +9,7 @@ export default function Header() {
 
   return (
     <header className="fixed top-0 z-50 w-full border-b border-white/10 bg-late4-ink/80 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 md:px-8">
+      <div className="site-container flex items-center justify-between px-5 py-4 md:px-8">
         <button onClick={() => scrollToSection('inicio')} className="font-editorial text-xl font-bold tracking-wide text-late4-ivory">
           LATE 4
         </button>

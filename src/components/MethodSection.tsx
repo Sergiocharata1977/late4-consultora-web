@@ -9,7 +9,7 @@ export default function MethodSection() {
 
   return (
     <section id="metodo" className="bg-late4-paper px-5 py-24 text-late4-ink md:px-8">
-      <div className="mx-auto grid max-w-7xl gap-14 md:grid-cols-[0.85fr_1.15fr]">
+      <div className="site-container grid gap-14 md:grid-cols-[0.85fr_1.15fr]">
         <div>
           <p className="eyebrow mb-5 text-late4-blue">Metodología</p>
           <h2 className="section-title">Un método simple para transformar la gestión</h2>

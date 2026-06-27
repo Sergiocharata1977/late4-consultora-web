@@ -24,7 +24,7 @@ export default function ServicesSection() {
 
   return (
     <section id="servicios" className="bg-white px-5 py-24 text-late4-ink md:px-8">
-      <div className="mx-auto max-w-7xl">
+      <div className="site-container">
         <div className="mx-auto mb-14 max-w-3xl text-center">
           <p className="eyebrow mb-5 text-late4-blue">Expertise</p>
           <h2 className="section-title">Diseñamos organizaciones más claras, medibles y digitales</h2>

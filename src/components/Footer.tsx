@@ -3,7 +3,7 @@ import { Instagram, Linkedin } from 'lucide-react';
 export default function Footer() {
   return (
     <footer className="bg-[#DDE1E7] px-5 py-14 text-late4-ink md:px-8">
-      <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+      <div className="site-container grid gap-10 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div>
           <div className="font-editorial mb-3 text-2xl font-bold tracking-wide">LATE 4</div>
           <p className="max-w-xs text-sm leading-relaxed text-late4-slate">
@@ -30,7 +30,7 @@ export default function Footer() {
           </div>
         ))}
       </div>
-      <div className="mx-auto mt-14 max-w-7xl border-t border-late4-ink/10 pt-7 text-center text-xs text-late4-slate">
+      <div className="site-container mt-14 border-t border-late4-ink/10 pt-7 text-center text-xs text-late4-slate">
         © 2024 Late 4 Consultora. Strategic Operational Excellence.
       </div>
     </footer>
