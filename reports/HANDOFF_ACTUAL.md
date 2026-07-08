@@ -50,3 +50,9 @@ npm run start
 - Archivos tocados: `src/app/page.tsx`, `src/app/globals.css`, `tailwind.config.ts`, `src/components/Header.tsx`, `Hero.tsx`, `ProblemSection.tsx`, `ServicesSection.tsx`, `MethodSection.tsx`, `SoftwareSection.tsx`, `Footer.tsx`.
 - Validacion liviana: `git diff --check` OK y busqueda de caracteres rotos en `src/components`, `src/app`, `tailwind.config.ts` OK.
 - Pendiente: `npm install` / `npm run type-check` y verificacion visual local. La instalacion de dependencias en `D:\Proyectos\late4-consultora-web` quedo muy lenta y fue detenida; los cambios de codigo quedaron aplicados en disco.
+
+### Ajuste posterior 2026-07-08
+
+- Se reemplazo la imagen principal del hero por foto personal del consultor.
+- Asset agregado: `public/images/sergio-defilippi-hero.png`.
+- Archivo tocado: `src/components/Hero.tsx`.

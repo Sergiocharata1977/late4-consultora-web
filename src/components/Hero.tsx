@@ -28,12 +28,12 @@ export default function Hero() {
         <div className="relative">
           <div className="rounded-sm border border-late4-ink/10 bg-white p-3 shadow-2xl shadow-late4-ink/18">
             <Image
-              src="/images/late4-hero-consultoria.png"
-              alt="Consultora explicando un tablero de gestion con procesos y metricas"
-              width={1280}
-              height={960}
+              src="/images/sergio-defilippi-hero.png"
+              alt="Sergio De Filippi, consultor en procesos, calidad y tecnologia"
+              width={1130}
+              height={1414}
               priority
-              className="aspect-[4/3] w-full rounded-sm object-cover"
+              className="aspect-[4/3] w-full rounded-sm object-cover object-[center_18%]"
             />
           </div>
           <div className="absolute bottom-6 left-3 flex items-center gap-3 rounded-sm bg-late4-teal px-4 py-3 text-white shadow-xl shadow-late4-ink/25">
