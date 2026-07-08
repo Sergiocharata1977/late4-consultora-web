@@ -57,3 +57,12 @@ npm run start
 - Asset agregado: `public/images/sergio-defilippi-hero.png`.
 - Archivo tocado: `src/components/Hero.tsx`.
 - Ajuste visual posterior: el retrato del hero usa marco mas panoramico (`16/10`) y `object-contain` para evitar zoom excesivo y mostrar mejor los brazos cruzados.
+
+## Actualizacion 2026-07-08 - Correccion de cards de proyectos
+
+- Se corrigio la seccion `Proyectos` / `Casos de Exito` para que la enumeracion visual sea 01/02/03.
+- `Don Candido IA` queda presentado como plataforma SaaS ISO 9001 + IA, sin menciones a trazabilidad animal ni stock de campo.
+- `Agro Biciuffa` queda presentado como web publica + plataforma interna privada, con link solo a `https://www.agrobiciuffa.com.ar`.
+- Se agrego `Don Juan GIS` como tercer proyecto, con estado `En desarrollo avanzado - 80%`.
+- Archivo tocado: `src/components/SoftwareSection.tsx`.
+- Validacion: `git diff --check` OK. `npm run type-check` no pudo ejecutarse porque `tsc` no esta disponible localmente; falta instalar dependencias en este repo.
