@@ -56,3 +56,4 @@ npm run start
 - Se reemplazo la imagen principal del hero por foto personal del consultor.
 - Asset agregado: `public/images/sergio-defilippi-hero.png`.
 - Archivo tocado: `src/components/Hero.tsx`.
+- Ajuste visual posterior: el retrato del hero usa marco mas panoramico (`16/10`) y `object-contain` para evitar zoom excesivo y mostrar mejor los brazos cruzados.

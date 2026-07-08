@@ -33,7 +33,7 @@ export default function Hero() {
               width={1130}
               height={1414}
               priority
-              className="aspect-[4/3] w-full rounded-sm object-cover object-[center_18%]"
+              className="aspect-[16/10] w-full rounded-sm bg-[#F3F2F0] object-contain object-center"
             />
           </div>
           <div className="absolute bottom-6 left-3 flex items-center gap-3 rounded-sm bg-late4-teal px-4 py-3 text-white shadow-xl shadow-late4-ink/25">
