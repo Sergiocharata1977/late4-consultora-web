@@ -1,53 +1,58 @@
-import { Briefcase, Cog, Rocket } from 'lucide-react';
+import { Bot, ClipboardCheck, FileSearch, ShieldCheck, Workflow } from 'lucide-react';
 
 export default function ServicesSection() {
   const services = [
     {
-      icon: Briefcase,
-      title: 'Administración',
-      description: 'Estructuramos tu back-office para que sea el motor de la empresa, no el freno.',
-      points: ['Control financiero', 'Flujo de caja', 'Reporting'],
+      icon: FileSearch,
+      code: '01 // Audit',
+      title: 'Diagnostico Integral de Gestion',
+      description: 'Analizamos el estado actual de tus procesos para identificar ineficiencias y oportunidades de digitalizacion.',
     },
     {
-      icon: Cog,
-      title: 'ISO 9001',
-      description: 'Certificación y mantenimiento de estándares de calidad con enfoque práctico y real.',
-      points: ['Auditorías', 'Mapa de procesos', 'Mejora continua'],
+      icon: ShieldCheck,
+      code: '02 // ISO 9001',
+      title: 'Implementacion ISO 9001',
+      description: 'Estandarizamos operaciones bajo normas internacionales de calidad adaptadas a la realidad de una PyME.',
     },
     {
-      icon: Rocket,
-      title: 'Escalabilidad',
-      description: 'Sistemas diseñados para absorber el crecimiento sin comprometer la calidad del servicio.',
-      points: ['Automatización', 'KPI en tiempo real', 'Cultura de datos'],
+      icon: Workflow,
+      code: '03 // Digital',
+      title: 'Digitalizacion Operativa',
+      description: 'Eliminamos el papel y el desorden migrando tus flujos de trabajo a entornos digitales centralizados.',
+    },
+    {
+      icon: ClipboardCheck,
+      code: '04 // Software',
+      title: 'Software a medida',
+      description: 'Desarrollamos soluciones tecnologicas que se adaptan a tu proceso real, no al reves.',
+    },
+    {
+      icon: Bot,
+      code: '05 // AI Systems',
+      title: 'IA aplicada a gestion empresarial',
+      description: 'Implementamos agentes inteligentes para automatizar tareas repetitivas y analizar datos operativos.',
     },
   ];
 
   return (
-    <section id="servicios" className="bg-white px-5 py-24 text-late4-ink md:px-8">
+    <section id="servicios" className="bg-[#F8F7F5] px-5 py-24 text-late4-ink md:px-8">
       <div className="site-container">
-        <div className="mx-auto mb-14 max-w-3xl text-center">
-          <p className="eyebrow mb-5 text-late4-blue">Expertise</p>
-          <h2 className="section-title">Diseñamos organizaciones más claras, medibles y digitales</h2>
-          <p className="section-subtitle mx-auto mt-5">
-            Soluciones integrales que combinan la rigurosidad de la norma con la agilidad de la tecnología moderna.
-          </p>
+        <div className="mb-12">
+          <p className="eyebrow mb-4">Nuestra oferta</p>
+          <h2 className="section-title">Servicios de Consultoria y Tech</h2>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className="grid border border-late4-ink/10 bg-white md:grid-cols-3">
           {services.map((service) => {
             const Icon = service.icon;
             return (
-              <article key={service.title} className="rounded-sm border border-late4-ink/10 bg-late4-paper p-7 transition hover:-translate-y-1 hover:border-late4-blue/30 hover:bg-white">
-                <Icon className="mb-6 text-late4-blue" size={25} />
-                <h3 className="font-editorial mb-4 text-2xl font-bold text-late4-ink">{service.title}</h3>
-                <p className="mb-6 text-sm leading-relaxed text-late4-slate">{service.description}</p>
-                <ul className="space-y-2">
-                  {service.points.map((point) => (
-                    <li key={point} className="text-[11px] font-bold uppercase tracking-[0.14em] text-late4-blue">
-                      + {point}
-                    </li>
-                  ))}
-                </ul>
+              <article key={service.title} className="min-h-[260px] border-b border-late4-ink/10 p-8 md:border-r">
+                <p className="mb-8 text-[11px] font-extrabold uppercase text-late4-slate/70">{service.code}</p>
+                <span className="mb-7 flex h-12 w-12 items-center justify-center rounded-sm bg-late4-teal-soft text-late4-teal">
+                  <Icon size={22} />
+                </span>
+                <h3 className="text-lg font-extrabold text-late4-ink">{service.title}</h3>
+                <p className="mt-4 text-sm leading-relaxed text-late4-slate">{service.description}</p>
               </article>
             );
           })}

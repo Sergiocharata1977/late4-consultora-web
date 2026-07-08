@@ -4,7 +4,6 @@ import ProblemSection from '@/components/ProblemSection';
 import ServicesSection from '@/components/ServicesSection';
 import MethodSection from '@/components/MethodSection';
 import SoftwareSection from '@/components/SoftwareSection';
-import ContactForm from '@/components/ContactForm';
 import Footer from '@/components/Footer';
 
 export default function Home() {
@@ -18,18 +17,19 @@ export default function Home() {
       <SoftwareSection />
 
       <section id="contacto" className="bg-late4-paper px-5 py-24 text-late4-ink md:px-8">
-        <div className="mx-auto max-w-3xl text-center">
-          <p className="eyebrow mb-5">Primer paso</p>
-          <h2 className="font-editorial text-4xl font-bold leading-tight md:text-5xl">
-            Empecemos por entender cómo funciona tu empresa
-          </h2>
-          <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-late4-slate md:text-base">
-            Agenda una llamada estratégica de 15 minutos para identificar tus cuellos de botella actuales.
+        <div className="site-container text-center">
+          <p className="mx-auto mb-8 inline-flex rounded-full border border-late4-ink/10 bg-white px-4 py-2 text-[11px] font-extrabold uppercase text-late4-teal">
+            Listo para el siguiente nivel
           </p>
-        </div>
-
-        <div className="mx-auto mt-12 max-w-xl rounded-sm border border-late4-ink/10 bg-white p-6 shadow-2xl shadow-late4-blue-deep/10 md:p-8">
-          <ContactForm />
+          <h2 className="mx-auto max-w-3xl text-4xl font-extrabold leading-tight md:text-5xl">
+            Las PyMEs no necesitan mas planillas aisladas. Necesitan procesos claros.
+          </h2>
+          <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-late4-slate">
+            Informacion confiable y sistemas que acompanen la forma real de trabajar. Empece hoy su transformacion.
+          </p>
+          <a href="mailto:info@late4.com.ar?subject=Solicitud%20de%20diagnostico%20de%20gestion" className="btn-primary mt-10">
+            Quiero ordenar mi empresa
+          </a>
         </div>
       </section>
 

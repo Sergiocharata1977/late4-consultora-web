@@ -1,75 +1,48 @@
-import { ArrowRight, BarChart3, ShieldCheck } from 'lucide-react';
+import Image from 'next/image';
+import { ArrowRight, BadgeCheck } from 'lucide-react';
 
 export default function Hero() {
   return (
-    <section id="inicio" className="relative min-h-[720px] overflow-hidden bg-late4-ink px-5 pt-28 text-white md:px-8 md:pt-36">
-      <div
-        className="absolute inset-0 bg-[url('/images/deep-blue-gears.png')] bg-cover bg-left opacity-80"
-        aria-hidden="true"
-      />
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(3,11,24,0.95)_0%,rgba(3,11,24,0.78)_34%,rgba(3,11,24,0.32)_68%,rgba(3,11,24,0.72)_100%)]" aria-hidden="true" />
-      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-late4-ink to-transparent" aria-hidden="true" />
-
-      <div className="site-container relative z-10 grid gap-12 pb-20 md:grid-cols-[1.05fr_0.95fr] md:items-end">
-        <div className="max-w-3xl pt-10 md:pt-20">
-          <div className="mb-6 inline-flex items-center border border-late4-gold/40 bg-late4-gold/15 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-late4-gold">
-            IA nativa & estrategia
-          </div>
-          <h1 className="font-editorial text-5xl font-bold leading-[0.95] text-late4-ivory md:text-7xl">
-            Consultoría en procesos y tecnología
+    <section id="inicio" className="bg-[#F8F7F5] px-5 pb-20 pt-28 text-late4-ink md:px-8 md:pb-28 md:pt-36">
+      <div className="site-container grid gap-12 md:grid-cols-[0.95fr_1.05fr] md:items-center">
+        <div>
+          <p className="eyebrow mb-6">Transformacion operativa</p>
+          <h1 className="max-w-2xl text-4xl font-extrabold leading-tight md:text-6xl">
+            Ordenamos procesos, digitalizamos la gestion y ayudamos a PyMEs a trabajar con{' '}
+            <span className="text-late4-teal">informacion confiable.</span>
           </h1>
-          <p className="mt-7 max-w-2xl font-editorial text-2xl font-semibold leading-tight text-white/88 md:text-4xl">
-            El reto: ordenar la empresa para que pueda crecer sin perder precisión.
+          <p className="mt-7 max-w-xl text-sm leading-relaxed text-late4-slate md:text-base">
+            Combinamos consultoria profesional, normas de calidad, tecnologia e inteligencia artificial para transformar la forma en que las empresas registran, controlan y mejoran sus operaciones.
           </p>
-          <p className="mt-5 max-w-xl text-base leading-relaxed text-white/72">
-            Transformamos el caos operativo en sistemas de alta precisión diseñados para la escalabilidad y la excelencia estratégica.
-          </p>
-          <div className="mt-9 flex flex-wrap gap-4">
+          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             <a href="#contacto" className="btn-primary">
-              Agendar consulta
+              Solicitar diagnostico de gestion
               <ArrowRight size={16} className="ml-2" />
             </a>
-            <a href="#metodo" className="btn-secondary">Nuestra metodología</a>
+            <a href="#metodo" className="btn-secondary">
+              Ver metodologia
+            </a>
           </div>
         </div>
 
-        <div className="glass-card mb-2 ml-auto w-full max-w-md p-6">
-          <div className="mb-6 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <span className="flex h-10 w-10 items-center justify-center rounded-sm bg-white/15 text-late4-blue-bright">
-                <BarChart3 size={20} />
-              </span>
-              <div>
-                <p className="text-sm font-bold text-late4-ivory">Auditoría operativa</p>
-                <p className="text-xs text-white/55">Eficiencia posterior a Late 4</p>
-              </div>
+        <div className="relative">
+          <div className="rounded-sm border border-late4-ink/10 bg-white p-3 shadow-2xl shadow-late4-ink/18">
+            <Image
+              src="/images/late4-hero-consultoria.png"
+              alt="Consultora explicando un tablero de gestion con procesos y metricas"
+              width={1280}
+              height={960}
+              priority
+              className="aspect-[4/3] w-full rounded-sm object-cover"
+            />
+          </div>
+          <div className="absolute bottom-6 left-3 flex items-center gap-3 rounded-sm bg-late4-teal px-4 py-3 text-white shadow-xl shadow-late4-ink/25">
+            <BadgeCheck size={22} />
+            <div>
+              <p className="text-[10px] font-extrabold uppercase">Calidad certificable</p>
+              <p className="text-sm font-extrabold">Normas ISO 9001</p>
             </div>
-            <ShieldCheck className="text-late4-blue-bright" size={22} />
           </div>
-
-          <div className="mb-6 grid grid-cols-3 gap-3">
-            {[
-              { label: 'Procesos', value: '82%' },
-              { label: 'Control', value: '74%' },
-              { label: 'Riesgo', value: '-31%' },
-            ].map((metric) => (
-              <div key={metric.label} className="rounded-sm border border-white/10 bg-white/8 p-3">
-                <p className="text-lg font-bold text-late4-ivory">{metric.value}</p>
-                <p className="mt-1 text-[10px] uppercase tracking-[0.14em] text-white/45">{metric.label}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="flex h-40 items-end gap-3">
-            {[42, 58, 47, 92, 55].map((height, index) => (
-              <div key={index} className="flex-1 bg-white/25">
-                <div className="bg-late4-blue-bright" style={{ height: `${height}%` }} />
-              </div>
-            ))}
-          </div>
-          <p className="mt-4 text-center text-[10px] font-bold uppercase tracking-[0.18em] text-white/55">
-            Incremento de eficiencia post-Late 4
-          </p>
         </div>
       </div>
     </section>

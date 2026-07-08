@@ -41,3 +41,12 @@ npm run start
 - Validacion: `npm run type-check` OK.
 - Verificacion visual local: `agent-browser` en `http://localhost:3000`, sin overlay de error, contenido renderizado; hero/header medidos en 1024px sobre viewport de 1264px.
 - Pendiente: deploy/commit/push no ejecutados en esta sesion.
+
+## Actualizacion 2026-07-08 - Rediseño home Late4 by De Filippi
+
+- Se aplico el rediseño de home con propuesta de valor consultoria + calidad ISO + tecnologia para PyMEs.
+- Nueva narrativa: transformacion operativa, problema Excel/WhatsApp/papeles, servicios de consultoria y tech, metodo Late4 en 5 pasos, casos Don Candido IA y Agro Biciuffa, CTA final.
+- Assets generados y guardados en `public/images/late4-hero-consultoria.png`, `public/images/case-don-candido.png`, `public/images/case-agro-biciuffa.png`.
+- Archivos tocados: `src/app/page.tsx`, `src/app/globals.css`, `tailwind.config.ts`, `src/components/Header.tsx`, `Hero.tsx`, `ProblemSection.tsx`, `ServicesSection.tsx`, `MethodSection.tsx`, `SoftwareSection.tsx`, `Footer.tsx`.
+- Validacion liviana: `git diff --check` OK y busqueda de caracteres rotos en `src/components`, `src/app`, `tailwind.config.ts` OK.
+- Pendiente: `npm install` / `npm run type-check` y verificacion visual local. La instalacion de dependencias en `D:\Proyectos\late4-consultora-web` quedo muy lenta y fue detenida; los cambios de codigo quedaron aplicados en disco.

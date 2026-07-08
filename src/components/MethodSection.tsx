@@ -1,46 +1,32 @@
 export default function MethodSection() {
   const steps = [
-    { number: '01', title: 'Diagnóstico profundo', description: 'Entrevistas y auditoría de procesos actuales para identificar la raíz real de las fricciones operativas.' },
-    { number: '02', title: 'Diseño de solución', description: 'Propuesta técnica y organizacional. Definición de flujos, responsables y métricas de éxito.' },
-    { number: '03', title: 'Implementación guiada', description: 'No entregamos manuales: acompañamos la ejecución. Ajustamos el plan en tiempo real con el equipo.' },
-    { number: '04', title: 'Medición y ajuste', description: 'Monitoreamos resultados mediante dashboards personalizados. El dato es el crítico juez de la mejora.' },
-    { number: '05', title: 'Escalada autónoma', description: 'Capacitación final para que la organización pueda seguir creciendo sin dependencia externa.' },
+    { number: '1', title: 'Diagnostico', description: 'Identificacion de cuellos de botella.' },
+    { number: '2', title: 'Diseno', description: 'Modelado de procesos eficientes.' },
+    { number: '3', title: 'Digitalizacion', description: 'Implementacion de herramientas tech.' },
+    { number: '4', title: 'Implementacion', description: 'Puesta en marcha y capacitacion.' },
+    { number: '5', title: 'Mejora continua', description: 'Auditoria y optimizacion constante.' },
   ];
 
   return (
     <section id="metodo" className="bg-late4-paper px-5 py-24 text-late4-ink md:px-8">
-      <div className="site-container grid gap-14 md:grid-cols-[0.85fr_1.15fr]">
-        <div>
-          <p className="eyebrow mb-5 text-late4-blue">Metodología</p>
-          <h2 className="section-title">Un método simple para transformar la gestión</h2>
-          <p className="section-subtitle mt-6">
-            No buscamos la complejidad. Buscamos la claridad radical a través de cinco etapas fundamentales.
+      <div className="site-container">
+        <div className="mx-auto max-w-2xl text-center">
+          <h2 className="section-title">El Metodo Late4</h2>
+          <p className="mt-4 text-sm leading-relaxed text-late4-slate">
+            Un camino estructurado hacia la madurez digital y operativa.
           </p>
-          <div className="mt-10 overflow-hidden rounded-sm border border-late4-ink/10 bg-white p-4 shadow-xl shadow-late4-blue-deep/8">
-            <div className="h-56 rounded-sm border border-late4-ink/10 bg-late4-paper p-6">
-              <div className="h-full rounded-sm border border-late4-blue/15 bg-white p-5">
-                <div className="mb-4 h-3 w-24 rounded-full bg-late4-blue/20" />
-                <div className="space-y-3">
-                  <div className="h-3 w-full bg-late4-blue/30" />
-                  <div className="h-3 w-4/5 bg-late4-slate/20" />
-                  <div className="h-3 w-2/3 bg-late4-blue/15" />
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
 
-        <div className="space-y-6">
+        <div className="relative mt-16 grid gap-8 md:grid-cols-5">
+          <div className="absolute left-0 right-0 top-8 hidden h-px bg-late4-ink/15 md:block" aria-hidden="true" />
           {steps.map((step) => (
-            <div key={step.number} className="grid grid-cols-[54px_1fr] gap-5">
-              <div className="flex h-10 w-10 items-center justify-center rounded-sm border border-late4-blue/25 bg-white text-xs font-bold text-late4-blue">
+            <article key={step.number} className="relative text-center">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-sm border-2 border-late4-teal bg-white text-sm font-extrabold text-late4-ink shadow-lg shadow-late4-teal/10">
                 {step.number}
               </div>
-              <div className="border-b border-late4-ink/10 pb-6">
-                <h3 className="font-bold text-late4-ink">{step.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-late4-slate">{step.description}</p>
-              </div>
-            </div>
+              <h3 className="mt-6 text-sm font-extrabold text-late4-ink">{step.title}</h3>
+              <p className="mx-auto mt-2 max-w-[150px] text-xs leading-relaxed text-late4-slate">{step.description}</p>
+            </article>
           ))}
         </div>
       </div>
