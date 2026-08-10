@@ -2,6 +2,17 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth != null
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin'
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.active == true;
+    }
+
+    match /users/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if false;
+    }
+
     match /contactRequests/{contactId} {
       // El formulario institucional puede crear consultas, pero nunca leerlas.
       allow create: if request.auth != null || (
@@ -15,7 +26,7 @@ service cloud.firestore {
       );
 
       // La gestión completa queda reservada a usuarios de Firebase Auth.
-      allow read, update, delete: if request.auth != null;
+      allow read, update, delete: if isAdmin();
     }
 
     match /{document=**} {

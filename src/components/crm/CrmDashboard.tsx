@@ -6,6 +6,7 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   onSnapshot,
   orderBy,
   query,
@@ -13,18 +14,21 @@ import {
   Timestamp,
   updateDoc,
 } from 'firebase/firestore';
-import { onAuthStateChanged, signInWithEmailAndPassword, signOut, type User } from 'firebase/auth';
+import { onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, type User } from 'firebase/auth';
 import {
   ArrowUpRight,
   CalendarClock,
   CheckCircle2,
   Clock3,
+  Eye,
+  EyeOff,
   LogOut,
   Mail,
   MessageCircle,
   Pencil,
   Plus,
   Search,
+  ShieldCheck,
   Trash2,
   User as UserIcon,
   Users,
@@ -92,6 +96,9 @@ export default function CrmDashboard() {
   const [authReady, setAuthReady] = useState(false);
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [resetSent, setResetSent] = useState(false);
+  const [accessGranted, setAccessGranted] = useState(false);
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -104,12 +111,30 @@ export default function CrmDashboard() {
 
   useEffect(() => onAuthStateChanged(auth, (currentUser) => {
     setUser(currentUser);
-    setAuthReady(true);
-    if (!currentUser) setLoading(false);
+    setAccessGranted(false);
+    if (!currentUser) {
+      setAuthReady(true);
+      setLoading(false);
+      return;
+    }
+
+    void getDoc(doc(db, 'users', currentUser.uid)).then((profile) => {
+      const data = profile.data();
+      if (!profile.exists() || data?.role !== 'admin' || data?.active === false) {
+        setError('Tu cuenta no tiene permisos de administrador para ingresar al CRM.');
+        return signOut(auth);
+      }
+      setAccessGranted(true);
+      setAuthReady(true);
+    }).catch(() => {
+      setError('No pudimos verificar tu perfil administrativo.');
+      setAuthReady(true);
+      return signOut(auth);
+    });
   }), []);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || !accessGranted) return;
     setLoading(true);
     const contactsQuery = query(collection(db, 'contactRequests'), orderBy('createdAt', 'desc'));
     return onSnapshot(contactsQuery, (snapshot) => {
@@ -137,7 +162,7 @@ export default function CrmDashboard() {
       setError(snapshotError.message);
       setLoading(false);
     });
-  }, [user]);
+  }, [accessGranted, user]);
 
   const filteredContacts = useMemo(() => {
     const term = search.trim().toLocaleLowerCase('es');
@@ -191,8 +216,30 @@ export default function CrmDashboard() {
     setError('');
     try {
       await signInWithEmailAndPassword(auth, loginEmail.trim(), loginPassword);
+    } catch (loginError) {
+      const code = typeof loginError === 'object' && loginError && 'code' in loginError ? String(loginError.code) : '';
+      setError(code === 'auth/invalid-credential' || code === 'auth/wrong-password'
+        ? 'La contraseña no es correcta. Podés recuperarla con el enlace de abajo.'
+        : code === 'auth/too-many-requests'
+          ? 'Demasiados intentos. Esperá unos minutos o recuperá tu contraseña.'
+          : 'No pudimos iniciar sesión. Revisá el email y la contraseña.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const resetPassword = async () => {
+    if (!loginEmail.trim()) {
+      setError('Ingresá tu email para enviarte el enlace de recuperación.');
+      return;
+    }
+    setSaving(true);
+    setError('');
+    try {
+      await sendPasswordResetEmail(auth, loginEmail.trim());
+      setResetSent(true);
     } catch {
-      setError('No pudimos iniciar sesión. Revisá el email y la contraseña.');
+      setError('No pudimos enviar el enlace de recuperación. Revisá el email.');
     } finally {
       setSaving(false);
     }
@@ -247,10 +294,15 @@ export default function CrmDashboard() {
               <input className="mt-2 w-full rounded-lg border border-late4-ink/15 px-4 py-3 font-normal outline-none focus:border-late4-teal" onChange={(event) => setLoginEmail(event.target.value)} required type="email" value={loginEmail} />
             </label>
             <label className="block text-sm font-bold text-late4-ink">Contraseña
-              <input className="mt-2 w-full rounded-lg border border-late4-ink/15 px-4 py-3 font-normal outline-none focus:border-late4-teal" onChange={(event) => setLoginPassword(event.target.value)} required type="password" value={loginPassword} />
+              <span className="relative mt-2 block">
+                <input className="w-full rounded-lg border border-late4-ink/15 py-3 pl-4 pr-12 font-normal outline-none focus:border-late4-teal" onChange={(event) => setLoginPassword(event.target.value)} required type={passwordVisible ? 'text' : 'password'} value={loginPassword} />
+                <button aria-label={passwordVisible ? 'Ocultar contraseña' : 'Mostrar contraseña'} className="absolute right-1.5 top-1.5 grid h-9 w-9 place-items-center rounded-md text-late4-slate hover:bg-late4-paper hover:text-late4-teal" onClick={() => setPasswordVisible((visible) => !visible)} type="button">{passwordVisible ? <EyeOff size={18} /> : <Eye size={18} />}</button>
+              </span>
             </label>
             {error && <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>}
+            {resetSent && <p className="rounded-lg bg-emerald-50 px-4 py-3 text-sm text-emerald-700">Te enviamos un enlace para crear una nueva contraseña.</p>}
             <button className="btn-primary w-full" disabled={saving} type="submit">{saving ? 'Ingresando…' : 'Ingresar al CRM'}</button>
+            <button className="w-full text-sm font-bold text-late4-teal hover:underline" disabled={saving} onClick={resetPassword} type="button">¿Olvidaste tu contraseña?</button>
           </form>
           <a className="mt-6 inline-flex items-center gap-1 text-sm font-bold text-late4-teal" href="/">Volver al sitio <ArrowUpRight size={15} /></a>
         </section>
@@ -267,7 +319,7 @@ export default function CrmDashboard() {
             <div><p className="font-extrabold">Late4 Consultora</p><p className="text-xs text-white/60">Gestión comercial</p></div>
           </div>
           <div className="flex items-center gap-3">
-            <span className="hidden text-xs text-white/60 sm:block">{user.email}</span>
+            <span className="hidden items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 text-xs font-bold text-white/80 sm:inline-flex"><ShieldCheck size={14} /> Administrador · {user.email}</span>
             <button aria-label="Cerrar sesión" className="grid h-10 w-10 place-items-center rounded-lg bg-white/10 transition hover:bg-white/20" onClick={() => signOut(auth)}><LogOut size={17} /></button>
           </div>
         </div>

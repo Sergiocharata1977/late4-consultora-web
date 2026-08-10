@@ -51,6 +51,8 @@ npm run start
 - Se agregaron `firestore.rules` y `firebase.json`: la landing solo puede crear consultas con estado/origen controlados y la lectura o gestion exige autenticacion.
 - Firebase Authentication ya cuenta con el usuario interno `sergiojdf@gmail.com` y proveedor Email/Password.
 - Reglas compiladas y desplegadas mediante Firebase CLI en `late-4-consultora` el 2026-08-10.
+- Se creo `users/{uid}` para `sergiojdf@gmail.com` con rol `admin` y estado activo; el CRM valida ese perfil antes de habilitar la gestion.
+- El acceso incorpora mostrar/ocultar contrasena y recuperacion por email.
 
 ## Actualizacion 2026-06-27 - Ajuste de ancho visual
 
