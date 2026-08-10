@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc } from 'firebase/firestore';
-import { Building2, Link2, Mail, Pencil, Phone, Plus, Search, X } from 'lucide-react';
+import { Building2, LayoutGrid, Link2, List, Mail, Pencil, Phone, Plus, Search, X } from 'lucide-react';
 import { db } from '@/lib/firebase';
 
 type Company = {
@@ -41,6 +41,7 @@ export default function CrmDirectory({ view }: { view: 'companies' | 'contacts' 
   const [companyForm, setCompanyForm] = useState(emptyCompany);
   const [personForm, setPersonForm] = useState(emptyPerson);
   const [error, setError] = useState('');
+  const [companyView, setCompanyView] = useState<'cards' | 'list'>('cards');
 
   useEffect(() => {
     const stopCompanies = onSnapshot(query(collection(db, 'crmCompanies'), orderBy('createdAt', 'desc')), (snapshot) => {
@@ -110,9 +111,9 @@ export default function CrmDirectory({ view }: { view: 'companies' | 'contacts' 
       {error && <p className="mt-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>}
 
       <section className="mt-7 overflow-hidden rounded-xl border border-late4-ink/5 bg-white shadow-sm">
-        <div className="border-b border-late4-ink/5 p-4"><div className="relative max-w-md"><Search className="absolute left-3 top-3 text-late4-slate" size={17} /><input className="w-full rounded-lg bg-late4-paper py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-1 focus:ring-late4-teal" onChange={(event) => setSearch(event.target.value)} placeholder={view === 'companies' ? 'Buscar empresa, grupo o actividad' : 'Buscar persona, empresa, email o teléfono'} value={search} /></div></div>
+        <div className="flex items-center justify-between gap-3 border-b border-late4-ink/5 p-4"><div className="relative w-full max-w-md"><Search className="absolute left-3 top-3 text-late4-slate" size={17} /><input className="w-full rounded-lg bg-late4-paper py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-1 focus:ring-late4-teal" onChange={(event) => setSearch(event.target.value)} placeholder={view === 'companies' ? 'Buscar empresa, grupo o actividad' : 'Buscar persona, empresa, email o teléfono'} value={search} /></div>{view === 'companies' && <div className="flex gap-2">{([['cards', LayoutGrid], ['list', List]] as const).map(([value, Icon]) => <button aria-label={`Vista ${value}`} className={`grid h-10 w-10 place-items-center rounded-lg border ${companyView === value ? 'border-late4-teal bg-late4-teal-soft text-late4-teal' : 'border-late4-ink/10 text-late4-slate'}`} key={value} onClick={() => setCompanyView(value)}><Icon size={17} /></button>)}</div>}</div>
 
-        {view === 'companies' ? (
+        {view === 'companies' && companyView === 'cards' ? (
           <div className="grid gap-4 bg-late4-paper/40 p-5 md:grid-cols-2 xl:grid-cols-3">
             {filteredCompanies.map((company) => {
               const related = relatedCompanies(company);
@@ -125,6 +126,8 @@ export default function CrmDirectory({ view }: { view: 'companies' | 'contacts' 
             })}
             {!filteredCompanies.length && <p className="col-span-full py-10 text-center text-sm text-late4-slate">Todavía no hay empresas registradas.</p>}
           </div>
+        ) : view === 'companies' ? (
+          <div className="overflow-x-auto"><table className="w-full min-w-[850px] text-left text-sm"><thead className="bg-late4-paper/70 text-[11px] uppercase tracking-wider text-late4-slate"><tr><th className="px-5 py-3">Empresa</th><th className="px-5 py-3">Actividad</th><th className="px-5 py-3">Grupo empresario</th><th className="px-5 py-3">Contactos</th><th className="px-5 py-3">Estado</th><th className="px-5 py-3 text-right">Acción</th></tr></thead><tbody className="divide-y divide-late4-ink/5">{filteredCompanies.map((company) => <tr key={company.id}><td className="px-5 py-4"><p className="font-extrabold">{company.name}</p><p className="text-xs text-late4-slate">{company.legalName || company.taxId || '—'}</p></td><td className="px-5 py-4 text-late4-slate">{company.industry || '—'}</td><td className="px-5 py-4">{company.groupName ? <span className="inline-flex items-center gap-1.5 rounded-full bg-late4-teal-soft px-2.5 py-1 text-xs font-bold text-late4-teal"><Link2 size={12} />{company.groupName}</span> : '—'}</td><td className="px-5 py-4 font-bold">{people.filter((person) => person.companyIds.includes(company.id)).length}</td><td className="px-5 py-4">{company.status === 'active' ? 'Cliente' : company.status === 'inactive' ? 'Inactiva' : 'Prospecto'}</td><td className="px-5 py-4 text-right"><button className="grid h-9 w-9 place-items-center rounded-lg bg-late4-paper text-late4-slate" onClick={() => editCompany(company)}><Pencil size={15} /></button></td></tr>)}{!filteredCompanies.length && <tr><td className="px-5 py-10 text-center text-late4-slate" colSpan={6}>Todavía no hay empresas registradas.</td></tr>}</tbody></table></div>
         ) : (
           <div className="overflow-x-auto"><table className="w-full min-w-[760px] text-left text-sm"><thead className="bg-late4-paper/70 text-[11px] uppercase tracking-wider text-late4-slate"><tr><th className="px-5 py-3">Contacto</th><th className="px-5 py-3">Cargo</th><th className="px-5 py-3">Empresas vinculadas</th><th className="px-5 py-3">Estado</th><th className="px-5 py-3 text-right">Acciones</th></tr></thead><tbody className="divide-y divide-late4-ink/5">
             {filteredPeople.map((person) => <tr key={person.id}><td className="px-5 py-4"><p className="font-extrabold">{person.name}</p><div className="mt-1 flex gap-3 text-xs text-late4-teal">{person.email && <a className="inline-flex items-center gap-1" href={`mailto:${person.email}`}><Mail size={12} />{person.email}</a>}{person.phone && <span className="inline-flex items-center gap-1"><Phone size={12} />{person.phone}</span>}</div></td><td className="px-5 py-4 text-late4-slate">{person.position || '—'}</td><td className="px-5 py-4"><div className="flex flex-wrap gap-1.5">{person.companyIds.map((id) => <span className="rounded-full bg-late4-teal-soft px-2.5 py-1 text-xs font-bold text-late4-teal" key={id}>{companies.find((company) => company.id === id)?.name ?? 'Empresa eliminada'}</span>)}{!person.companyIds.length && <span className="text-late4-slate">Sin empresa</span>}</div></td><td className="px-5 py-4"><span className={`rounded-full px-2.5 py-1 text-xs font-bold ${person.active !== false ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-600'}`}>{person.active !== false ? 'Activo' : 'Inactivo'}</span></td><td className="px-5 py-4 text-right"><button className="grid h-9 w-9 place-items-center rounded-lg bg-late4-paper text-late4-slate" onClick={() => editPerson(person)}><Pencil size={15} /></button></td></tr>)}

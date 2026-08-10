@@ -21,9 +21,12 @@ import {
   CalendarClock,
   CheckCircle2,
   Clock3,
+  Columns3,
   Eye,
   EyeOff,
   LogOut,
+  LayoutGrid,
+  List,
   Mail,
   MessageCircle,
   Pencil,
@@ -38,6 +41,8 @@ import {
 } from 'lucide-react';
 import { auth, db } from '@/lib/firebase';
 import CrmDirectory from './CrmDirectory';
+import CrmUserAdmin from './CrmUserAdmin';
+import CrmActions from './CrmActions';
 
 type ContactStatus = 'new' | 'contacted' | 'qualified' | 'won' | 'archived';
 
@@ -102,7 +107,9 @@ export default function CrmDashboard() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [resetSent, setResetSent] = useState(false);
   const [accessGranted, setAccessGranted] = useState(false);
-  const [activeView, setActiveView] = useState<'opportunities' | 'companies' | 'contacts'>('opportunities');
+  const [profileRole, setProfileRole] = useState<'admin' | 'operator' | null>(null);
+  const [activeView, setActiveView] = useState<'opportunities' | 'companies' | 'contacts' | 'actions' | 'users'>('opportunities');
+  const [opportunityView, setOpportunityView] = useState<'kanban' | 'cards' | 'list'>('kanban');
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -116,6 +123,7 @@ export default function CrmDashboard() {
   useEffect(() => onAuthStateChanged(auth, (currentUser) => {
     setUser(currentUser);
     setAccessGranted(false);
+    setProfileRole(null);
     if (!currentUser) {
       setAuthReady(true);
       setLoading(false);
@@ -124,11 +132,12 @@ export default function CrmDashboard() {
 
     void getDoc(doc(db, 'users', currentUser.uid)).then((profile) => {
       const data = profile.data();
-      if (!profile.exists() || data?.role !== 'admin' || data?.active === false) {
-        setError('Tu cuenta no tiene permisos de administrador para ingresar al CRM.');
+      if (!profile.exists() || !['admin', 'operator'].includes(data?.role) || data?.active === false) {
+        setError('Tu cuenta no tiene permisos activos para ingresar al CRM.');
         void signOut(auth);
         return;
       }
+      setProfileRole(data?.role as 'admin' | 'operator');
       setAccessGranted(true);
       setAuthReady(true);
     }).catch(() => {
@@ -324,7 +333,7 @@ export default function CrmDashboard() {
             <div><p className="font-extrabold">Late4 Consultora</p><p className="text-xs text-white/60">Gestión comercial</p></div>
           </div>
           <div className="flex items-center gap-3">
-            <span className="hidden items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 text-xs font-bold text-white/80 sm:inline-flex"><ShieldCheck size={14} /> Administrador · {user.email}</span>
+            <span className="hidden items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 text-xs font-bold text-white/80 sm:inline-flex"><ShieldCheck size={14} /> {profileRole === 'admin' ? 'Administrador' : 'Operador'} · {user.email}</span>
             <button aria-label="Cerrar sesión" className="grid h-10 w-10 place-items-center rounded-lg bg-white/10 transition hover:bg-white/20" onClick={() => signOut(auth)}><LogOut size={17} /></button>
           </div>
         </div>
@@ -338,6 +347,8 @@ export default function CrmDashboard() {
               ['opportunities', 'Oportunidades', TrendingUp],
               ['companies', 'Empresas', Building2],
               ['contacts', 'Contactos', Users],
+              ['actions', 'Acciones', CheckCircle2],
+              ...(profileRole === 'admin' ? [['users', 'Usuarios', ShieldCheck] as const] : []),
             ] as const).map(([value, label, Icon]) => <button className={`flex min-w-max items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-extrabold transition ${activeView === value ? 'bg-late4-teal-soft text-late4-teal' : 'text-late4-slate hover:bg-late4-paper hover:text-late4-ink'}`} key={value} onClick={() => setActiveView(value)}><Icon size={18} />{label}</button>)}
           </nav>
           <div className="mt-8 hidden rounded-xl bg-late4-ink p-4 text-white lg:block"><p className="text-xs font-extrabold">Estructura CRM</p><p className="mt-2 text-xs leading-5 text-white/60">Las empresas pueden compartir un grupo y cada contacto puede vincularse con varias empresas.</p></div>
@@ -364,10 +375,14 @@ export default function CrmDashboard() {
         <section className="mt-6 overflow-hidden rounded-xl border border-late4-ink/5 bg-white shadow-sm">
           <div className="flex flex-col gap-3 border-b border-late4-ink/5 p-4 md:flex-row md:items-center md:justify-between">
             <div className="relative flex-1 md:max-w-md"><Search className="absolute left-3 top-3 text-late4-slate" size={17} /><input className="w-full rounded-lg bg-late4-paper py-2.5 pl-10 pr-4 text-sm outline-none ring-late4-teal focus:ring-1" onChange={(event) => setSearch(event.target.value)} placeholder="Buscar por nombre, empresa, email o teléfono" value={search} /></div>
-            <select className="rounded-lg border border-late4-ink/10 bg-white px-3 py-2.5 text-sm font-bold outline-none" onChange={(event) => setStatusFilter(event.target.value as 'all' | ContactStatus)} value={statusFilter}><option value="all">Todos los estados</option>{statuses.map((status) => <option key={status.value} value={status.value}>{status.label}</option>)}</select>
+            <div className="flex flex-wrap gap-2"><select className="rounded-lg border border-late4-ink/10 bg-white px-3 py-2.5 text-sm font-bold outline-none" onChange={(event) => setStatusFilter(event.target.value as 'all' | ContactStatus)} value={statusFilter}><option value="all">Todos los estados</option>{statuses.map((status) => <option key={status.value} value={status.value}>{status.label}</option>)}</select>{([['kanban', Columns3], ['cards', LayoutGrid], ['list', List]] as const).map(([value, Icon]) => <button aria-label={`Vista ${value}`} className={`grid h-10 w-10 place-items-center rounded-lg border ${opportunityView === value ? 'border-late4-teal bg-late4-teal-soft text-late4-teal' : 'border-late4-ink/10 text-late4-slate'}`} key={value} onClick={() => setOpportunityView(value)}><Icon size={17} /></button>)}</div>
           </div>
 
-          <div className="overflow-x-auto">
+          {opportunityView === 'kanban' && <div className="grid min-w-[1100px] grid-cols-5 gap-3 overflow-x-auto bg-late4-paper/40 p-4">{statuses.map((column) => { const items = filteredContacts.filter((contact) => contact.status === column.value); return <section className="min-h-[360px] rounded-xl bg-late4-paper p-3" key={column.value}><div className="flex items-center justify-between"><h3 className="text-xs font-extrabold uppercase tracking-wide">{column.label}</h3><span className="rounded-full bg-white px-2 py-0.5 text-xs font-bold">{items.length}</span></div><div className="mt-3 space-y-3">{items.map((contact) => <button className="w-full rounded-lg border border-late4-ink/5 bg-white p-4 text-left shadow-sm hover:border-late4-teal/30" key={contact.id} onClick={() => openEdit(contact)}><p className="font-extrabold">{contact.company || contact.name}</p><p className="mt-1 text-xs text-late4-slate">{contact.name} · {contact.service || 'Servicio sin clasificar'}</p>{contact.nextActionAt && <p className="mt-3 flex items-center gap-1 text-xs font-bold text-late4-teal"><CalendarClock size={13} />{contact.nextActionAt}</p>}</button>)}{!items.length && <p className="py-8 text-center text-xs text-late4-slate">Sin oportunidades</p>}</div></section>; })}</div>}
+
+          {opportunityView === 'cards' && <div className="grid gap-4 bg-late4-paper/40 p-5 md:grid-cols-2 xl:grid-cols-3">{filteredContacts.map((contact) => { const status = statusInfo(contact.status); return <article className="rounded-xl border border-late4-ink/5 bg-white p-5 shadow-sm" key={contact.id}><div className="flex items-start justify-between gap-3"><div><h3 className="font-extrabold">{contact.company || contact.name}</h3><p className="mt-1 text-xs text-late4-slate">Referente: {contact.name}</p></div><span className={`rounded-full px-2.5 py-1 text-xs font-extrabold ${status.tone}`}>{status.label}</span></div><p className="mt-4 line-clamp-3 text-sm leading-6 text-late4-slate">{contact.message || 'Sin descripción'}</p><button className="mt-4 text-xs font-extrabold text-late4-teal" onClick={() => openEdit(contact)}>Ver y editar</button></article>; })}{!filteredContacts.length && <p className="col-span-full py-10 text-center text-sm text-late4-slate">No hay oportunidades.</p>}</div>}
+
+          {opportunityView === 'list' && <div className="overflow-x-auto">
             <table className="w-full min-w-[900px] text-left text-sm">
               <thead className="bg-late4-paper/70 text-[11px] uppercase tracking-wider text-late4-slate"><tr><th className="px-5 py-3">Oportunidad / Referente</th><th className="px-5 py-3">Empresa</th><th className="px-5 py-3">Estado</th><th className="px-5 py-3">Ingreso</th><th className="px-5 py-3">Próximo paso</th><th className="px-5 py-3 text-right">Acciones</th></tr></thead>
               <tbody className="divide-y divide-late4-ink/5">
@@ -379,8 +394,8 @@ export default function CrmDashboard() {
                 })}
               </tbody>
             </table>
-          </div>
-        </section></> : <CrmDirectory view={activeView} />}
+          </div>}
+        </section></> : activeView === 'users' ? <CrmUserAdmin /> : activeView === 'actions' ? <CrmActions /> : <CrmDirectory view={activeView} />}
         </div>
       </div>
 

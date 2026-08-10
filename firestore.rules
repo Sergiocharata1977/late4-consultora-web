@@ -8,9 +8,16 @@ service cloud.firestore {
         && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.active == true;
     }
 
+    function isActiveCrmUser() {
+      return request.auth != null
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.active == true
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'operator'];
+    }
+
     match /users/{userId} {
-      allow read: if request.auth != null && request.auth.uid == userId;
-      allow write: if false;
+      allow read: if (request.auth != null && request.auth.uid == userId) || isAdmin();
+      allow create, update: if isAdmin();
+      allow delete: if isAdmin() && request.auth.uid != userId;
     }
 
     match /contactRequests/{contactId} {
@@ -26,15 +33,19 @@ service cloud.firestore {
       );
 
       // La gestión completa queda reservada a usuarios de Firebase Auth.
-      allow read, update, delete: if isAdmin();
+      allow read, update, delete: if isActiveCrmUser();
     }
 
     match /crmCompanies/{companyId} {
-      allow read, create, update, delete: if isAdmin();
+      allow read, create, update, delete: if isActiveCrmUser();
     }
 
     match /crmContacts/{contactId} {
-      allow read, create, update, delete: if isAdmin();
+      allow read, create, update, delete: if isActiveCrmUser();
+    }
+
+    match /crmActions/{actionId} {
+      allow read, create, update, delete: if isActiveCrmUser();
     }
 
     match /{document=**} {

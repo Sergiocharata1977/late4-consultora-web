@@ -56,6 +56,10 @@ npm run start
 - El CRM se organiza con menu lateral en Oportunidades, Empresas y Contactos.
 - `contactRequests` conserva las oportunidades originadas en la web; `crmCompanies` almacena empresas y `crmContacts` personas.
 - Los contactos usan `companyIds` para una relacion muchos-a-muchos con empresas. Las empresas con el mismo `groupName` se muestran automaticamente como integrantes del mismo grupo empresario.
+- Oportunidades dispone de vistas Kanban, tarjetas y lista; Empresas dispone de tarjetas y lista.
+- La seccion Usuarios permite a administradores crear cuentas `admin` u `operator` mediante una instancia secundaria de Firebase Auth, sin cerrar la sesion actual.
+- Administradores y operadores activos acceden al CRM; solo administradores gestionan perfiles en `users`.
+- Acciones comerciales se almacenan en `crmActions` con tipo llamada, visita, email, reunion, tarea u otra; pueden vincular empresa, contacto y oportunidad.
 
 ## Actualizacion 2026-06-27 - Ajuste de ancho visual
 
