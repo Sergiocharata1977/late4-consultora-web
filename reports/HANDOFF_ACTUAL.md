@@ -6,6 +6,15 @@
 **Stack:** Next.js 14 + TypeScript + Tailwind CSS + Firebase + Vercel
 **Estado general:** Landing institucional de Late 4 Consultora.
 
+## Regla permanente de validacion local
+
+- Este repositorio se trabaja desde una memoria externa.
+- No ejecutar `npm install`, `npm run build`, `npm run type-check`, lint ni tests localmente.
+- No instalar ni reparar dependencias locales para intentar compilar.
+- Usar solamente controles estaticos simples: lectura, busquedas, `git diff --check` y revision del diff.
+- El flujo de cierre es: controles simples, commit, push y validacion mediante el deployment de Vercel.
+- Toda entrega debe informar el resultado de Vercel; una compilacion local no forma parte del flujo de este proyecto.
+
 ## Regla de identificacion
 
 Usar siempre el prefijo `03-` al pedir o coordinar trabajo sobre este repo. Este proyecto es independiente del resto del conjunto y no debe confundirse con:
