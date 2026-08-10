@@ -53,6 +53,9 @@ npm run start
 - Reglas compiladas y desplegadas mediante Firebase CLI en `late-4-consultora` el 2026-08-10.
 - Se creo `users/{uid}` para `sergiojdf@gmail.com` con rol `admin` y estado activo; el CRM valida ese perfil antes de habilitar la gestion.
 - El acceso incorpora mostrar/ocultar contrasena y recuperacion por email.
+- El CRM se organiza con menu lateral en Oportunidades, Empresas y Contactos.
+- `contactRequests` conserva las oportunidades originadas en la web; `crmCompanies` almacena empresas y `crmContacts` personas.
+- Los contactos usan `companyIds` para una relacion muchos-a-muchos con empresas. Las empresas con el mismo `groupName` se muestran automaticamente como integrantes del mismo grupo empresario.
 
 ## Actualizacion 2026-06-27 - Ajuste de ancho visual
 

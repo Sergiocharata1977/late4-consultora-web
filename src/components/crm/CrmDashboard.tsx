@@ -17,6 +17,7 @@ import {
 import { onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, type User } from 'firebase/auth';
 import {
   ArrowUpRight,
+  Building2,
   CalendarClock,
   CheckCircle2,
   Clock3,
@@ -30,11 +31,13 @@ import {
   Search,
   ShieldCheck,
   Trash2,
+  TrendingUp,
   User as UserIcon,
   Users,
   X,
 } from 'lucide-react';
 import { auth, db } from '@/lib/firebase';
+import CrmDirectory from './CrmDirectory';
 
 type ContactStatus = 'new' | 'contacted' | 'qualified' | 'won' | 'archived';
 
@@ -99,6 +102,7 @@ export default function CrmDashboard() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [resetSent, setResetSent] = useState(false);
   const [accessGranted, setAccessGranted] = useState(false);
+  const [activeView, setActiveView] = useState<'opportunities' | 'companies' | 'contacts'>('opportunities');
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -326,15 +330,29 @@ export default function CrmDashboard() {
         </div>
       </header>
 
-      <div className="mx-auto max-w-7xl px-5 py-8 lg:px-8">
+      <div className="mx-auto flex max-w-[1500px] flex-col lg:min-h-[calc(100vh-73px)] lg:flex-row">
+        <aside className="border-b border-late4-ink/10 bg-white px-4 py-4 lg:w-64 lg:shrink-0 lg:border-b-0 lg:border-r lg:px-5 lg:py-8">
+          <p className="hidden text-[10px] font-extrabold uppercase tracking-[0.18em] text-late4-slate lg:block">Gestión comercial</p>
+          <nav className="flex gap-2 overflow-x-auto lg:mt-4 lg:flex-col">
+            {([
+              ['opportunities', 'Oportunidades', TrendingUp],
+              ['companies', 'Empresas', Building2],
+              ['contacts', 'Contactos', Users],
+            ] as const).map(([value, label, Icon]) => <button className={`flex min-w-max items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-extrabold transition ${activeView === value ? 'bg-late4-teal-soft text-late4-teal' : 'text-late4-slate hover:bg-late4-paper hover:text-late4-ink'}`} key={value} onClick={() => setActiveView(value)}><Icon size={18} />{label}</button>)}
+          </nav>
+          <div className="mt-8 hidden rounded-xl bg-late4-ink p-4 text-white lg:block"><p className="text-xs font-extrabold">Estructura CRM</p><p className="mt-2 text-xs leading-5 text-white/60">Las empresas pueden compartir un grupo y cada contacto puede vincularse con varias empresas.</p></div>
+        </aside>
+
+        <div className="min-w-0 flex-1 px-5 py-8 lg:px-8">
+        {activeView === 'opportunities' ? <>
         <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
-          <div><p className="eyebrow">CRM interno</p><h1 className="mt-2 text-3xl font-extrabold">Contactos y consultas</h1><p className="mt-2 text-sm text-late4-slate">Seguimiento centralizado de los contactos que llegan desde la web.</p></div>
-          <button className="btn-primary gap-2" onClick={openNew}><Plus size={17} /> Nuevo contacto</button>
+          <div><p className="eyebrow">CRM interno</p><h1 className="mt-2 text-3xl font-extrabold">Oportunidades</h1><p className="mt-2 text-sm text-late4-slate">Consultas de servicios que llegan desde la web y su seguimiento comercial.</p></div>
+          <button className="btn-primary gap-2" onClick={openNew}><Plus size={17} /> Nueva oportunidad</button>
         </div>
 
         <section className="mt-7 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {[
-            { label: 'Contactos activos', value: metrics.total, icon: Users },
+            { label: 'Oportunidades activas', value: metrics.total, icon: TrendingUp },
             { label: 'Nuevos', value: metrics.new, icon: UserIcon },
             { label: 'En seguimiento', value: metrics.active, icon: Clock3 },
             { label: 'Convertidos', value: metrics.won, icon: CheckCircle2 },
@@ -351,7 +369,7 @@ export default function CrmDashboard() {
 
           <div className="overflow-x-auto">
             <table className="w-full min-w-[900px] text-left text-sm">
-              <thead className="bg-late4-paper/70 text-[11px] uppercase tracking-wider text-late4-slate"><tr><th className="px-5 py-3">Contacto</th><th className="px-5 py-3">Empresa</th><th className="px-5 py-3">Estado</th><th className="px-5 py-3">Ingreso</th><th className="px-5 py-3">Próximo paso</th><th className="px-5 py-3 text-right">Acciones</th></tr></thead>
+              <thead className="bg-late4-paper/70 text-[11px] uppercase tracking-wider text-late4-slate"><tr><th className="px-5 py-3">Oportunidad / Referente</th><th className="px-5 py-3">Empresa</th><th className="px-5 py-3">Estado</th><th className="px-5 py-3">Ingreso</th><th className="px-5 py-3">Próximo paso</th><th className="px-5 py-3 text-right">Acciones</th></tr></thead>
               <tbody className="divide-y divide-late4-ink/5">
                 {loading && <tr><td className="px-5 py-10 text-center text-late4-slate" colSpan={6}>Cargando contactos…</td></tr>}
                 {!loading && filteredContacts.length === 0 && <tr><td className="px-5 py-10 text-center text-late4-slate" colSpan={6}>No hay contactos para estos filtros.</td></tr>}
@@ -362,13 +380,14 @@ export default function CrmDashboard() {
               </tbody>
             </table>
           </div>
-        </section>
+        </section></> : <CrmDirectory view={activeView} />}
+        </div>
       </div>
 
-      {editorOpen && (
+      {activeView === 'opportunities' && editorOpen && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-late4-ink/60 p-4 backdrop-blur-sm">
           <section className="max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-white shadow-2xl">
-            <header className="sticky top-0 flex items-start justify-between border-b border-late4-ink/10 bg-white px-6 py-5"><div><p className="eyebrow">CRM</p><h2 className="mt-1 text-2xl font-extrabold">{editing ? 'Editar contacto' : 'Nuevo contacto'}</h2></div><button aria-label="Cerrar" className="grid h-9 w-9 place-items-center rounded-lg bg-late4-paper" onClick={closeEditor}><X size={17} /></button></header>
+            <header className="sticky top-0 flex items-start justify-between border-b border-late4-ink/10 bg-white px-6 py-5"><div><p className="eyebrow">CRM</p><h2 className="mt-1 text-2xl font-extrabold">{editing ? 'Editar oportunidad' : 'Nueva oportunidad'}</h2></div><button aria-label="Cerrar" className="grid h-9 w-9 place-items-center rounded-lg bg-late4-paper" onClick={closeEditor}><X size={17} /></button></header>
             <form className="p-6" onSubmit={saveContact}>
               <div className="grid gap-4 md:grid-cols-2">
                 <Field label="Nombre *"><input required value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} /></Field>
@@ -381,7 +400,7 @@ export default function CrmDashboard() {
                 <Field className="md:col-span-2" label="Consulta original"><textarea rows={3} value={form.message} onChange={(event) => setForm({ ...form, message: event.target.value })} /></Field>
                 <Field className="md:col-span-2" label="Notas internas"><textarea rows={4} value={form.internalNotes} onChange={(event) => setForm({ ...form, internalNotes: event.target.value })} /></Field>
               </div>
-              <div className="mt-6 flex justify-end gap-3 border-t border-late4-ink/10 pt-5"><button className="btn-secondary" onClick={closeEditor} type="button">Cancelar</button><button className="btn-primary" disabled={saving} type="submit">{saving ? 'Guardando…' : 'Guardar contacto'}</button></div>
+              <div className="mt-6 flex justify-end gap-3 border-t border-late4-ink/10 pt-5"><button className="btn-secondary" onClick={closeEditor} type="button">Cancelar</button><button className="btn-primary" disabled={saving} type="submit">{saving ? 'Guardando…' : 'Guardar oportunidad'}</button></div>
             </form>
           </section>
         </div>

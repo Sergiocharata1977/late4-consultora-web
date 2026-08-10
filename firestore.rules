@@ -29,6 +29,14 @@ service cloud.firestore {
       allow read, update, delete: if isAdmin();
     }
 
+    match /crmCompanies/{companyId} {
+      allow read, create, update, delete: if isAdmin();
+    }
+
+    match /crmContacts/{contactId} {
+      allow read, create, update, delete: if isAdmin();
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }
