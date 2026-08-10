@@ -34,6 +34,15 @@ npm run start
 - Completar este handoff con estado funcional detallado cuando se retome trabajo activo en Late4.
 - Evitar mezclar cambios de deploy o cache local con cambios funcionales.
 
+## Actualizacion 2026-08-10 - CRM interno de contactos
+
+- Se agrego la seccion privada `/interno/crm` para gestionar las consultas recibidas desde la landing.
+- El CRM reutiliza la coleccion existente `contactRequests` e incorpora metricas, busqueda, filtros, alta manual, edicion, estados, notas internas, proximo seguimiento y accesos a email/WhatsApp.
+- El acceso usa Firebase Authentication con email y contrasena; `/interno` redirige al CRM.
+- Se agregaron `firestore.rules` y `firebase.json`: la landing solo puede crear consultas con estado/origen controlados y la lectura o gestion exige autenticacion.
+- Firebase Authentication ya cuenta con el usuario interno `sergiojdf@gmail.com` y proveedor Email/Password.
+- Reglas compiladas y desplegadas mediante Firebase CLI en `late-4-consultora` el 2026-08-10.
+
 ## Actualizacion 2026-06-27 - Ajuste de ancho visual
 
 - Se redujo el ancho maximo del contenido principal de la landing de `max-w-7xl` a una clase comun `.site-container` con `max-w-5xl` (1024px), equivalente a ~20% menos.
