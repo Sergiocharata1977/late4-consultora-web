@@ -49,6 +49,7 @@ type ContactStatus = 'new' | 'contacted' | 'qualified' | 'won' | 'archived';
 type Contact = {
   id: string;
   name: string;
+  companyId?: string;
   company?: string;
   email: string;
   phone?: string;
@@ -74,6 +75,7 @@ const statuses: Array<{ value: ContactStatus; label: string; tone: string }> = [
 
 const emptyForm: ContactForm = {
   name: '',
+  companyId: '',
   company: '',
   email: '',
   phone: '',
@@ -111,6 +113,7 @@ export default function CrmDashboard() {
   const [activeView, setActiveView] = useState<'opportunities' | 'companies' | 'contacts' | 'actions' | 'users'>('opportunities');
   const [opportunityView, setOpportunityView] = useState<'kanban' | 'cards' | 'list'>('kanban');
   const [contacts, setContacts] = useState<Contact[]>([]);
+  const [companies, setCompanies] = useState<Array<{ id: string; name: string }>>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
@@ -151,12 +154,13 @@ export default function CrmDashboard() {
     if (!user || !accessGranted) return;
     setLoading(true);
     const contactsQuery = query(collection(db, 'contactRequests'), orderBy('createdAt', 'desc'));
-    return onSnapshot(contactsQuery, (snapshot) => {
+    const stopContacts = onSnapshot(contactsQuery, (snapshot) => {
       setContacts(snapshot.docs.map((item) => {
         const data = item.data();
         return {
           id: item.id,
           name: String(data.name ?? ''),
+          companyId: String(data.companyId ?? ''),
           company: String(data.company ?? ''),
           email: String(data.email ?? ''),
           phone: String(data.phone ?? ''),
@@ -176,6 +180,10 @@ export default function CrmDashboard() {
       setError(snapshotError.message);
       setLoading(false);
     });
+    const stopCompanies = onSnapshot(collection(db, 'crmCompanies'), (snapshot) => {
+      setCompanies(snapshot.docs.map((item) => ({ id: item.id, name: String(item.data().name ?? '') })).sort((a, b) => a.name.localeCompare(b.name, 'es')));
+    }, (snapshotError) => setError(snapshotError.message));
+    return () => { stopContacts(); stopCompanies(); };
   }, [accessGranted, user]);
 
   const filteredContacts = useMemo(() => {
@@ -205,6 +213,7 @@ export default function CrmDashboard() {
     setEditing(contact);
     setForm({
       name: contact.name,
+      companyId: contact.companyId ?? '',
       company: contact.company ?? '',
       email: contact.email,
       phone: contact.phone ?? '',
@@ -406,7 +415,7 @@ export default function CrmDashboard() {
             <form className="p-6" onSubmit={saveContact}>
               <div className="grid gap-4 md:grid-cols-2">
                 <Field label="Nombre *"><input required value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} /></Field>
-                <Field label="Empresa"><input value={form.company} onChange={(event) => setForm({ ...form, company: event.target.value })} /></Field>
+                <Field label="Empresa *"><select required value={form.companyId} onChange={(event) => { const selected = companies.find((company) => company.id === event.target.value); setForm({ ...form, companyId: event.target.value, company: selected?.name ?? '' }); }}><option value="">{form.company && !form.companyId ? `Seleccionar empresa (actual: ${form.company})` : 'Seleccionar empresa'}</option>{companies.map((company) => <option key={company.id} value={company.id}>{company.name}</option>)}</select></Field>
                 <Field label="Email *"><input required type="email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} /></Field>
                 <Field label="Teléfono / WhatsApp"><input type="tel" value={form.phone} onChange={(event) => setForm({ ...form, phone: event.target.value })} /></Field>
                 <Field label="Servicio de interés"><select value={form.service} onChange={(event) => setForm({ ...form, service: event.target.value })}><option value="">Sin clasificar</option><option value="consultoria-procesos">Consultoría de procesos</option><option value="iso-9001">Implementación ISO 9001</option><option value="digitalizacion">Digitalización y automatización</option><option value="software">Desarrollo de software</option><option value="diagnostico">Diagnóstico integral</option><option value="otro">Otro servicio</option></select></Field>
