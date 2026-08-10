@@ -122,14 +122,15 @@ export default function CrmDashboard() {
       const data = profile.data();
       if (!profile.exists() || data?.role !== 'admin' || data?.active === false) {
         setError('Tu cuenta no tiene permisos de administrador para ingresar al CRM.');
-        return signOut(auth);
+        void signOut(auth);
+        return;
       }
       setAccessGranted(true);
       setAuthReady(true);
     }).catch(() => {
       setError('No pudimos verificar tu perfil administrativo.');
       setAuthReady(true);
-      return signOut(auth);
+      void signOut(auth);
     });
   }), []);
 
