@@ -1,0 +1,25 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /contactRequests/{contactId} {
+      // El formulario institucional puede crear consultas, pero nunca leerlas.
+      allow create: if request.auth != null || (
+        request.resource.data.keys().hasAll(['name', 'email', 'message', 'status', 'source'])
+        && request.resource.data.keys().hasOnly(['name', 'company', 'email', 'phone', 'message', 'createdAt', 'source', 'status'])
+        && request.resource.data.name is string
+        && request.resource.data.email is string
+        && request.resource.data.message is string
+        && request.resource.data.status == 'new'
+        && request.resource.data.source == 'late4-web'
+      );
+
+      // La gestión completa queda reservada a usuarios de Firebase Auth.
+      allow read, update, delete: if request.auth != null;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
