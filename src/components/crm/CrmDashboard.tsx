@@ -26,7 +26,7 @@ import {
   Plus,
   Search,
   Trash2,
-  User,
+  User as UserIcon,
   Users,
   X,
 } from 'lucide-react';
@@ -282,7 +282,7 @@ export default function CrmDashboard() {
         <section className="mt-7 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {[
             { label: 'Contactos activos', value: metrics.total, icon: Users },
-            { label: 'Nuevos', value: metrics.new, icon: User },
+            { label: 'Nuevos', value: metrics.new, icon: UserIcon },
             { label: 'En seguimiento', value: metrics.active, icon: Clock3 },
             { label: 'Convertidos', value: metrics.won, icon: CheckCircle2 },
           ].map(({ label, value, icon: Icon }) => <article className="rounded-xl border border-late4-ink/5 bg-white p-5 shadow-sm" key={label}><div className="flex items-center justify-between"><p className="text-sm font-bold text-late4-slate">{label}</p><Icon className="text-late4-teal" size={19} /></div><p className="mt-3 text-3xl font-extrabold">{value}</p></article>)}
