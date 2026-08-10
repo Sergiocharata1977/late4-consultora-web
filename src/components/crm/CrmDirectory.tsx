@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc } from 'firebase/firestore';
-import { Building2, Link2, Mail, Pencil, Phone, Plus, Search, Users, X } from 'lucide-react';
+import { Building2, Link2, Mail, Pencil, Phone, Plus, Search, X } from 'lucide-react';
 import { db } from '@/lib/firebase';
 
 type Company = {
