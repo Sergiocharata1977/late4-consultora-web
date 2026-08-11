@@ -1,10 +1,11 @@
 'use client';
 
-import { FormEvent, useEffect, useMemo, useState } from 'react';
+import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { addDoc, collection, deleteDoc, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc, writeBatch } from 'firebase/firestore';
 import { Building2, Download, ExternalLink, LayoutGrid, Link2, List, Mail, MapPin, Pencil, Phone, Plus, Search, Trash2, X } from 'lucide-react';
 import { db } from '@/lib/firebase';
 import industrialParksData from '@/data/industrial-parks.json';
+import neaIsoProspects from '@/data/nea-iso-prospects.json';
 
 type Company = {
   id: string;
@@ -21,6 +22,9 @@ type Company = {
   organizationType?: 'company' | 'industrial_park';
   sourceSheet?: string;
   importKey?: string;
+  importBatch?: string;
+  companySize?: string;
+  isoPotential?: 'very_high' | 'high';
   notes?: string;
   status?: 'prospect' | 'active' | 'inactive';
 };
@@ -53,10 +57,13 @@ export default function CrmDirectory({ view }: { view: 'companies' | 'contacts' 
   const [importing, setImporting] = useState(false);
   const [notice, setNotice] = useState('');
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [companiesLoaded, setCompaniesLoaded] = useState(false);
+  const neaImportAttempted = useRef(false);
 
   useEffect(() => {
     const stopCompanies = onSnapshot(query(collection(db, 'crmCompanies'), orderBy('createdAt', 'desc')), (snapshot) => {
       setCompanies(snapshot.docs.map((item) => ({ id: item.id, ...item.data() } as Company)));
+      setCompaniesLoaded(true);
     }, (snapshotError) => setError(snapshotError.message));
     const stopPeople = onSnapshot(query(collection(db, 'crmContacts'), orderBy('createdAt', 'desc')), (snapshot) => {
       setPeople(snapshot.docs.map((item) => ({ id: item.id, ...item.data(), companyIds: item.data().companyIds ?? [] } as Person)));
@@ -66,7 +73,7 @@ export default function CrmDirectory({ view }: { view: 'companies' | 'contacts' 
 
   const filteredCompanies = useMemo(() => {
     const term = search.toLocaleLowerCase('es').trim();
-    return companies.filter((company) => !term || [company.name, company.legalName, company.groupName, company.industry, company.location, company.parkName, company.publicContact].some((value) => value?.toLocaleLowerCase('es').includes(term)));
+    return companies.filter((company) => !term || [company.name, company.legalName, company.groupName, company.industry, company.location, company.parkName, company.publicContact, company.companySize].some((value) => value?.toLocaleLowerCase('es').includes(term)));
   }, [companies, search]);
 
   const filteredPeople = useMemo(() => {
@@ -142,6 +149,33 @@ export default function CrmDirectory({ view }: { view: 'companies' | 'contacts' 
     } finally { setImporting(false); }
   };
 
+  const importNeaProspects = async () => {
+    setImporting(true); setError(''); setNotice('');
+    try {
+      const existing = new Set(companies.map((company) => `${normalize(company.name)}--${normalize(company.location ?? '')}`));
+      const pending = neaIsoProspects.filter((item) => !existing.has(`${normalize(item.name)}--${normalize(item.location)}`));
+      if (!pending.length) { setNotice('Los prospectos de Chaco y Quimilí ya están cargados.'); return; }
+      const batch = writeBatch(db);
+      pending.forEach((item) => {
+        const importKey = `${normalize(item.name)}--${normalize(item.location)}`;
+        batch.set(doc(db, 'crmCompanies', `nea-iso--${importKey}`), { ...item, importKey, importBatch: 'nea-iso-2026-08', organizationType: 'company', sourceSheet: 'Prospectos NEA ISO', status: 'prospect', createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
+      });
+      await batch.commit();
+      setNotice(`Se agregaron ${pending.length} empresas a contactar, sin duplicar las existentes.`);
+    } catch (importError) {
+      setError(importError instanceof Error ? importError.message : 'No se pudieron importar los prospectos NEA.');
+    } finally { setImporting(false); }
+  };
+
+  useEffect(() => {
+    if (view !== 'companies' || !companiesLoaded || neaImportAttempted.current) return;
+    neaImportAttempted.current = true;
+    if (companies.some((company) => company.importBatch === 'nea-iso-2026-08')) return;
+    void importNeaProspects();
+    // Importacion inicial de este lote; luego las bajas manuales permanecen eliminadas.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [companies, companiesLoaded, view]);
+
   return (
     <div>
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
@@ -150,7 +184,7 @@ export default function CrmDirectory({ view }: { view: 'companies' | 'contacts' 
           <h1 className="mt-2 text-3xl font-extrabold">{view === 'companies' ? 'Empresas' : 'Contactos'}</h1>
           <p className="mt-2 text-sm text-late4-slate">{view === 'companies' ? 'Organizaciones, grupos empresarios y relaciones comerciales.' : 'Personas vinculadas a una o varias empresas.'}</p>
         </div>
-        <div className="flex flex-wrap gap-2">{view === 'companies' && <button className="btn-secondary gap-2" disabled={importing} onClick={importIndustrialParks}><Download size={17} /> {importing ? 'Importando…' : 'Importar parques'}</button>}<button className="btn-primary gap-2" onClick={() => setOpen(true)}><Plus size={17} /> {view === 'companies' ? 'Nueva empresa' : 'Nuevo contacto'}</button></div>
+        <div className="flex flex-wrap gap-2">{view === 'companies' && <><button className="btn-secondary gap-2" disabled={importing} onClick={importIndustrialParks}><Download size={17} /> Importar base industrial</button><button className="btn-secondary gap-2" disabled={importing} onClick={importNeaProspects}><Download size={17} /> {importing ? 'Importando…' : 'Importar prospectos NEA'}</button></>}<button className="btn-primary gap-2" onClick={() => setOpen(true)}><Plus size={17} /> {view === 'companies' ? 'Nueva empresa' : 'Nuevo contacto'}</button></div>
       </div>
 
       {error && <p className="mt-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>}
@@ -166,8 +200,10 @@ export default function CrmDirectory({ view }: { view: 'companies' | 'contacts' 
               const contacts = people.filter((person) => person.companyIds.includes(company.id));
               return <article className="rounded-xl border border-late4-ink/5 bg-white p-5 shadow-sm" key={company.id}>
                 <div className="flex items-start justify-between gap-3"><div className="flex gap-3"><div className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-late4-teal-soft text-late4-teal"><Building2 size={20} /></div><div><span className="text-[10px] font-extrabold uppercase tracking-wider text-late4-teal">Empresa</span><h2 className="mt-1 font-extrabold">{company.name}</h2><p className="mt-1 text-xs text-late4-slate"><strong>Actividad:</strong> {company.industry || company.legalName || 'Sin actividad registrada'}</p></div></div><div className="flex shrink-0 gap-1"><button aria-label={`Editar ${company.name}`} className="grid h-9 w-9 place-items-center rounded-lg bg-late4-paper text-late4-slate" onClick={() => editCompany(company)}><Pencil size={15} /></button><button aria-label={`Eliminar ${company.name}`} className="grid h-9 w-9 place-items-center rounded-lg bg-red-50 text-red-600 hover:bg-red-100" disabled={deletingId === company.id} onClick={() => deleteCompany(company)}><Trash2 size={15} /></button></div></div>
+                {(company.companySize || company.isoPotential) && <div className="mt-3 flex flex-wrap gap-2 text-[11px] font-bold">{company.companySize && <span className="rounded-full bg-slate-100 px-2.5 py-1 text-slate-700">{company.companySize}</span>}{company.isoPotential && <span className={`rounded-full px-2.5 py-1 ${company.isoPotential === 'very_high' ? 'bg-red-50 text-red-700' : 'bg-amber-50 text-amber-700'}`}>Potencial ISO: {company.isoPotential === 'very_high' ? 'Muy alto' : 'Alto'}</span>}</div>}
                 {(company.location || company.parkName) && <div className="mt-4 space-y-1 text-xs text-late4-slate">{company.location && <p className="flex items-center gap-1.5"><MapPin size={13} />{company.location}</p>}{company.parkName && <p className="flex items-center gap-1.5"><Building2 size={13} />{company.parkName}</p>}</div>}
                 {(company.publicContact || company.sourceUrl) && <div className="mt-3 flex flex-wrap gap-2 text-xs">{company.publicContact && <span className="font-semibold text-late4-slate"><strong>Contacto:</strong> {company.publicContact}</span>}{company.sourceUrl && <a className="inline-flex items-center gap-1 font-bold text-late4-teal" href={company.sourceUrl} rel="noreferrer" target="_blank">Fuente <ExternalLink size={11} /></a>}</div>}
+                {company.importBatch === 'nea-iso-2026-08' && !company.publicContact && <p className="mt-3 text-xs font-semibold text-amber-700">Contacto pendiente de relevamiento</p>}
                 {company.groupName && <div className="mt-4 rounded-lg bg-late4-paper p-3"><p className="flex items-center gap-1.5 text-xs font-extrabold uppercase text-late4-teal"><Link2 size={13} /> Grupo {company.groupName}</p><p className="mt-1 text-xs text-late4-slate">{related.length ? `Relacionada con ${related.map((item) => item.name).join(', ')}` : 'Primera empresa registrada de este grupo'}</p></div>}
                 <div className="mt-4 flex items-center justify-between border-t border-late4-ink/5 pt-4 text-xs"><span className="font-bold text-late4-slate">{contacts.length} contacto{contacts.length === 1 ? '' : 's'}</span><span className="rounded-full bg-slate-100 px-2.5 py-1 font-bold">{company.status === 'active' ? 'Cliente' : company.status === 'inactive' ? 'Inactiva' : 'Prospecto'}</span></div>
               </article>;
