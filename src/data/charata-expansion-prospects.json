@@ -1,0 +1,72 @@
+[
+  {
+    "name": "Jorge Pinto e Hijo S.R.L.",
+    "location": "Charata",
+    "industry": "Agroquímicos / semillas / insumos agrícolas",
+    "companySize": "Empresa agropecuaria registrada y activa",
+    "isoPotential": "high",
+    "publicContact": "(03731) 42-2764 | jorgepinto@pintoycia.com.ar",
+    "website": "https://pintoycia.com.ar/",
+    "sourceUrl": "https://gestion.inase.gob.ar/empresas/empresas/index/page%3A81/sort%3Atelefono/direction%3Adesc"
+  },
+  {
+    "name": "Agroinsumos Dionisi S.R.L.",
+    "location": "Charata",
+    "industry": "Agroinsumos, semillas, acopio y comercialización de cereales",
+    "companySize": "Planta de acopio y múltiples áreas comerciales",
+    "isoPotential": "very_high",
+    "publicContact": "3731 530021 | info@agroinsumosdionisi.com.ar",
+    "website": "https://www.agroinsumosdionisi.com.ar/",
+    "sourceUrl": "https://www.agroinsumosdionisi.com.ar/?page_id=811"
+  },
+  {
+    "name": "Grupo Paglia",
+    "location": "Charata",
+    "industry": "Industria metalúrgica, maquinaria agrícola y ferretería industrial",
+    "companySize": "Empresa metalúrgica con alcance nacional y regional",
+    "isoPotential": "very_high",
+    "publicContact": "03731 62-0135 / 42-2271 | ventas@grupopaglia.com",
+    "website": "http://grupopaglia.com/",
+    "sourceUrl": "https://expoagronea.com/en-agronea-inteligencia-agropecuaria-grupo-paglia-presentara-innovaciones-la-industria-metalurgica-para-el-agro/"
+  },
+  {
+    "name": "Red Televisión S.R.L.",
+    "location": "Charata",
+    "industry": "Telecomunicaciones, fibra óptica, televisión digital, medios y publicidad",
+    "companySize": "Más de 35 años de actividad y cobertura regional",
+    "isoPotential": "high",
+    "publicContact": "03731-420159",
+    "website": "https://www.redtvsrl.com.ar/",
+    "sourceUrl": "https://www.redtvsrl.com.ar/",
+    "notes": "Empresa actual de la red local históricamente asociada a Sudoeste Televisora Color; se registra una sola ficha para evitar duplicados."
+  },
+  {
+    "name": "Edgardo Saúl Gurman",
+    "location": "Charata",
+    "industry": "Producción agrícola, ganadería, transporte y actividad comercial",
+    "companySize": "Explotación agropecuaria y logística local",
+    "isoPotential": "high",
+    "publicContact": "(03731) 42-0924 | Libertad 555, Charata",
+    "sourceUrl": "https://www.dnb.com/business-directory/company-profiles.gurman_edgardo_saul.7768e9e7260014f5a0fb8c1ecea92003.html"
+  },
+  {
+    "name": "LIPSA S.R.L.",
+    "location": "Charata",
+    "industry": "Producción agrícola de granos de alta calidad",
+    "companySize": "Más de 120.000 hectáreas anuales y 600.000 toneladas de producción",
+    "isoPotential": "very_high",
+    "website": "https://www.lipsa.com.ar/",
+    "sourceUrl": "https://www.lipsa.com.ar/sobre-lipsa.php",
+    "notes": "Empresa agropecuaria familiar con auditoría externa de PwC y calificación de FIX SCR."
+  },
+  {
+    "name": "Pampa del Cielo S.R.L.",
+    "location": "Charata",
+    "industry": "Agroinsumos, semillas, acopio y conservación de granos",
+    "companySize": "Base operativa de 40 hectáreas, silos y cámaras de frío",
+    "isoPotential": "very_high",
+    "publicContact": "03731 420059 / 422226 | tecnica@pampadelcielo.com.ar",
+    "website": "https://www.pampadelcielo.com.ar/",
+    "sourceUrl": "https://www.pampadelcielo.com.ar/"
+  }
+]

@@ -6,6 +6,7 @@ import { Building2, Download, ExternalLink, Eye, LayoutGrid, Link2, List, Mail, 
 import { db } from '@/lib/firebase';
 import industrialParksData from '@/data/industrial-parks.json';
 import neaIsoProspects from '@/data/nea-iso-prospects.json';
+import charataExpansionProspects from '@/data/charata-expansion-prospects.json';
 
 type Company = {
   id: string;
@@ -62,6 +63,7 @@ export default function CrmDirectory({ view }: { view: 'companies' | 'contacts' 
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [companiesLoaded, setCompaniesLoaded] = useState(false);
   const neaImportAttempted = useRef(false);
+  const charataImportAttempted = useRef(false);
 
   useEffect(() => {
     const stopCompanies = onSnapshot(query(collection(db, 'crmCompanies'), orderBy('createdAt', 'desc')), (snapshot) => {
@@ -173,12 +175,39 @@ export default function CrmDirectory({ view }: { view: 'companies' | 'contacts' 
     } finally { setImporting(false); }
   };
 
+  const importCharataExpansion = async () => {
+    setImporting(true); setError(''); setNotice('');
+    try {
+      const existing = new Set(companies.map((company) => `${normalize(company.name)}--${normalize(company.location ?? '')}`));
+      const pending = charataExpansionProspects.filter((item) => !existing.has(`${normalize(item.name)}--${normalize(item.location)}`));
+      if (!pending.length) { setNotice('La ampliación de empresas de Charata ya está cargada.'); return; }
+      const batch = writeBatch(db);
+      pending.forEach((item) => {
+        const importKey = `${normalize(item.name)}--${normalize(item.location)}`;
+        batch.set(doc(db, 'crmCompanies', `charata-expansion--${importKey}`), { ...item, importKey, importBatch: 'charata-expansion-2026-08', organizationType: 'company', sourceSheet: 'Ampliación empresas de Charata', status: 'prospect', createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
+      });
+      await batch.commit();
+      setNotice(`Se agregaron ${pending.length} empresas verificadas de Charata.`);
+    } catch (importError) {
+      setError(importError instanceof Error ? importError.message : 'No se pudo importar la ampliación de Charata.');
+    } finally { setImporting(false); }
+  };
+
   useEffect(() => {
     if (view !== 'companies' || !companiesLoaded || neaImportAttempted.current) return;
     neaImportAttempted.current = true;
     if (companies.some((company) => company.importBatch === 'nea-iso-2026-08')) return;
     void importNeaProspects();
     // Importacion inicial de este lote; luego las bajas manuales permanecen eliminadas.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [companies, companiesLoaded, view]);
+
+  useEffect(() => {
+    if (view !== 'companies' || !companiesLoaded || charataImportAttempted.current) return;
+    charataImportAttempted.current = true;
+    if (companies.some((company) => company.importBatch === 'charata-expansion-2026-08')) return;
+    void importCharataExpansion();
+    // Lote independiente para no restaurar sucursales NEA eliminadas manualmente.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [companies, companiesLoaded, view]);
 
@@ -190,7 +219,7 @@ export default function CrmDirectory({ view }: { view: 'companies' | 'contacts' 
           <h1 className="mt-2 text-3xl font-extrabold">{view === 'companies' ? 'Empresas' : 'Contactos'}</h1>
           <p className="mt-2 text-sm text-late4-slate">{view === 'companies' ? 'Organizaciones, grupos empresarios y relaciones comerciales.' : 'Personas vinculadas a una o varias empresas.'}</p>
         </div>
-        <div className="flex flex-wrap gap-2">{view === 'companies' && <><button className="btn-secondary gap-2" disabled={importing} onClick={importIndustrialParks}><Download size={17} /> Importar base industrial</button><button className="btn-secondary gap-2" disabled={importing} onClick={importNeaProspects}><Download size={17} /> {importing ? 'Importando…' : 'Importar prospectos NEA'}</button></>}<button className="btn-primary gap-2" onClick={() => setOpen(true)}><Plus size={17} /> {view === 'companies' ? 'Nueva empresa' : 'Nuevo contacto'}</button></div>
+        <div className="flex flex-wrap gap-2">{view === 'companies' && <><button className="btn-secondary gap-2" disabled={importing} onClick={importIndustrialParks}><Download size={17} /> Importar base industrial</button><button className="btn-secondary gap-2" disabled={importing} onClick={importNeaProspects}><Download size={17} /> Importar prospectos NEA</button><button className="btn-secondary gap-2" disabled={importing} onClick={importCharataExpansion}><Download size={17} /> {importing ? 'Importando…' : 'Importar Charata'}</button></>}<button className="btn-primary gap-2" onClick={() => setOpen(true)}><Plus size={17} /> {view === 'companies' ? 'Nueva empresa' : 'Nuevo contacto'}</button></div>
       </div>
 
       {error && <p className="mt-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>}
@@ -209,7 +238,7 @@ export default function CrmDirectory({ view }: { view: 'companies' | 'contacts' 
                 {(company.companySize || company.isoPotential) && <div className="mt-3 flex flex-wrap gap-2 text-[11px] font-bold">{company.companySize && <span className="rounded-full bg-slate-100 px-2.5 py-1 text-slate-700">{company.companySize}</span>}{company.isoPotential && <span className={`rounded-full px-2.5 py-1 ${company.isoPotential === 'very_high' ? 'bg-red-50 text-red-700' : 'bg-amber-50 text-amber-700'}`}>Potencial ISO: {company.isoPotential === 'very_high' ? 'Muy alto' : 'Alto'}</span>}</div>}
                 {(company.location || company.parkName) && <div className="mt-4 space-y-2">{company.location && <p className="flex items-center gap-2 text-xl font-extrabold text-late4-ink"><MapPin className="text-late4-teal" size={19} />{company.location}</p>}{company.parkName && <p className="flex items-center gap-1.5 text-xs text-late4-slate"><Building2 size={13} />{company.parkName}</p>}</div>}
                 {(company.publicContact || company.sourceUrl) && <div className="mt-3 flex flex-wrap gap-2 text-xs">{company.publicContact && <span className="font-semibold text-late4-slate"><strong>Contacto:</strong> {company.publicContact}</span>}{company.sourceUrl && <a className="inline-flex items-center gap-1 font-bold text-late4-teal" href={company.sourceUrl} rel="noreferrer" target="_blank">Fuente <ExternalLink size={11} /></a>}</div>}
-                {company.importBatch === 'nea-iso-2026-08' && !company.publicContact && <p className="mt-3 text-xs font-semibold text-amber-700">Contacto pendiente de relevamiento</p>}
+                {company.importBatch && !company.publicContact && <p className="mt-3 text-xs font-semibold text-amber-700">Contacto pendiente de relevamiento</p>}
                 <div className="mt-4 flex flex-wrap gap-2"><button className="inline-flex items-center gap-1.5 rounded-lg bg-late4-teal-soft px-3 py-2 text-xs font-extrabold text-late4-teal" onClick={() => setSelectedCompany(company)}><Eye size={14} /> Ver ficha</button><a className="inline-flex items-center gap-1.5 rounded-lg bg-late4-paper px-3 py-2 text-xs font-extrabold text-late4-slate" href={mapsUrl(company)} rel="noreferrer" target="_blank"><MapPinned size={14} /> Google Maps</a></div>
                 {company.groupName && <div className="mt-4 rounded-lg bg-late4-paper p-3"><p className="flex items-center gap-1.5 text-xs font-extrabold uppercase text-late4-teal"><Link2 size={13} /> Grupo {company.groupName}</p><p className="mt-1 text-xs text-late4-slate">{related.length ? `Relacionada con ${related.map((item) => item.name).join(', ')}` : 'Primera empresa registrada de este grupo'}</p></div>}
                 <div className="mt-4 flex items-center justify-between border-t border-late4-ink/5 pt-4 text-xs"><span className="font-bold text-late4-slate">{contacts.length} contacto{contacts.length === 1 ? '' : 's'}</span><span className="rounded-full bg-slate-100 px-2.5 py-1 font-bold">{company.status === 'active' ? 'Cliente' : company.status === 'inactive' ? 'Inactiva' : 'Prospecto'}</span></div>
