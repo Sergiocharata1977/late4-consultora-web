@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useEffect, useMemo, useState } from 'react';
+import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc, writeBatch } from 'firebase/firestore';
 import { Building2, Download, ExternalLink, LayoutGrid, Link2, List, Mail, MapPin, Pencil, Phone, Plus, Search, X } from 'lucide-react';
 import { db } from '@/lib/firebase';
@@ -52,10 +52,13 @@ export default function CrmDirectory({ view }: { view: 'companies' | 'contacts' 
   const [companyView, setCompanyView] = useState<'cards' | 'list'>('cards');
   const [importing, setImporting] = useState(false);
   const [notice, setNotice] = useState('');
+  const [companiesLoaded, setCompaniesLoaded] = useState(false);
+  const automaticImportAttempted = useRef(false);
 
   useEffect(() => {
     const stopCompanies = onSnapshot(query(collection(db, 'crmCompanies'), orderBy('createdAt', 'desc')), (snapshot) => {
       setCompanies(snapshot.docs.map((item) => ({ id: item.id, ...item.data() } as Company)));
+      setCompaniesLoaded(true);
     }, (snapshotError) => setError(snapshotError.message));
     const stopPeople = onSnapshot(query(collection(db, 'crmContacts'), orderBy('createdAt', 'desc')), (snapshot) => {
       setPeople(snapshot.docs.map((item) => ({ id: item.id, ...item.data(), companyIds: item.data().companyIds ?? [] } as Person)));
@@ -126,6 +129,14 @@ export default function CrmDirectory({ view }: { view: 'companies' | 'contacts' 
       setError(importError instanceof Error ? importError.message : 'No se pudo importar la base.');
     } finally { setImporting(false); }
   };
+
+  useEffect(() => {
+    if (view !== 'companies' || !companiesLoaded || automaticImportAttempted.current) return;
+    automaticImportAttempted.current = true;
+    void importIndustrialParks();
+    // La importacion se ejecuta una sola vez al recibir el primer snapshot autorizado.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [companiesLoaded, view]);
 
   return (
     <div>
