@@ -115,16 +115,19 @@ export default function CrmDirectory({ view }: { view: 'companies' | 'contacts' 
   const importIndustrialParks = async () => {
     setImporting(true); setError(''); setNotice('');
     try {
+      const desiredKeys = new Set(industrialParksData.map((item) => `${normalize(item.name)}--${normalize(item.location)}`));
       const existing = new Set(companies.map((company) => company.importKey || `${normalize(company.name)}--${normalize(company.location ?? '')}`));
       const pending = industrialParksData.filter((item) => !existing.has(`${normalize(item.name)}--${normalize(item.location)}`));
-      if (!pending.length) { setNotice('La base de parques industriales ya está cargada y actualizada.'); return; }
+      const obsolete = companies.filter((company) => company.id.startsWith('industrial-base--') && !desiredKeys.has(company.importKey || `${normalize(company.name)}--${normalize(company.location ?? '')}`));
+      if (!pending.length && !obsolete.length) { setNotice('La base de empresas contactables ya está cargada y actualizada.'); return; }
       const batch = writeBatch(db);
+      obsolete.forEach((company) => batch.delete(doc(db, 'crmCompanies', company.id)));
       pending.forEach((item) => {
         const importKey = `${normalize(item.name)}--${normalize(item.location)}`;
         batch.set(doc(db, 'crmCompanies', `industrial-base--${importKey}`), { ...item, importKey, status: 'prospect', createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
       });
       await batch.commit();
-      setNotice(`Se importaron ${pending.length} registros sin duplicar los existentes.`);
+      setNotice(`Base depurada: ${pending.length} empresas agregadas y ${obsolete.length} registros sin contacto eliminados.`);
     } catch (importError) {
       setError(importError instanceof Error ? importError.message : 'No se pudo importar la base.');
     } finally { setImporting(false); }
@@ -161,9 +164,9 @@ export default function CrmDirectory({ view }: { view: 'companies' | 'contacts' 
               const related = relatedCompanies(company);
               const contacts = people.filter((person) => person.companyIds.includes(company.id));
               return <article className="rounded-xl border border-late4-ink/5 bg-white p-5 shadow-sm" key={company.id}>
-                <div className="flex items-start justify-between gap-3"><div className="flex gap-3"><div className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-late4-teal-soft text-late4-teal"><Building2 size={20} /></div><div><h2 className="font-extrabold">{company.name}</h2><p className="mt-1 text-xs text-late4-slate">{company.industry || company.legalName || 'Sin actividad registrada'}</p>{company.organizationType === 'industrial_park' && <span className="mt-2 inline-block rounded-full bg-amber-50 px-2 py-1 text-[10px] font-extrabold uppercase text-amber-700">Parque / distrito</span>}</div></div><button className="grid h-9 w-9 place-items-center rounded-lg bg-late4-paper text-late4-slate" onClick={() => editCompany(company)}><Pencil size={15} /></button></div>
+                <div className="flex items-start justify-between gap-3"><div className="flex gap-3"><div className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-late4-teal-soft text-late4-teal"><Building2 size={20} /></div><div><span className="text-[10px] font-extrabold uppercase tracking-wider text-late4-teal">Empresa</span><h2 className="mt-1 font-extrabold">{company.name}</h2><p className="mt-1 text-xs text-late4-slate"><strong>Actividad:</strong> {company.industry || company.legalName || 'Sin actividad registrada'}</p></div></div><button className="grid h-9 w-9 place-items-center rounded-lg bg-late4-paper text-late4-slate" onClick={() => editCompany(company)}><Pencil size={15} /></button></div>
                 {(company.location || company.parkName) && <div className="mt-4 space-y-1 text-xs text-late4-slate">{company.location && <p className="flex items-center gap-1.5"><MapPin size={13} />{company.location}</p>}{company.parkName && <p className="flex items-center gap-1.5"><Building2 size={13} />{company.parkName}</p>}</div>}
-                {(company.publicContact || company.sourceUrl) && <div className="mt-3 flex flex-wrap gap-2 text-xs">{company.publicContact && <span className="text-late4-slate">{company.publicContact}</span>}{company.sourceUrl && <a className="inline-flex items-center gap-1 font-bold text-late4-teal" href={company.sourceUrl} rel="noreferrer" target="_blank">Fuente <ExternalLink size={11} /></a>}</div>}
+                {(company.publicContact || company.sourceUrl) && <div className="mt-3 flex flex-wrap gap-2 text-xs">{company.publicContact && <span className="font-semibold text-late4-slate"><strong>Contacto:</strong> {company.publicContact}</span>}{company.sourceUrl && <a className="inline-flex items-center gap-1 font-bold text-late4-teal" href={company.sourceUrl} rel="noreferrer" target="_blank">Fuente <ExternalLink size={11} /></a>}</div>}
                 {company.groupName && <div className="mt-4 rounded-lg bg-late4-paper p-3"><p className="flex items-center gap-1.5 text-xs font-extrabold uppercase text-late4-teal"><Link2 size={13} /> Grupo {company.groupName}</p><p className="mt-1 text-xs text-late4-slate">{related.length ? `Relacionada con ${related.map((item) => item.name).join(', ')}` : 'Primera empresa registrada de este grupo'}</p></div>}
                 <div className="mt-4 flex items-center justify-between border-t border-late4-ink/5 pt-4 text-xs"><span className="font-bold text-late4-slate">{contacts.length} contacto{contacts.length === 1 ? '' : 's'}</span><span className="rounded-full bg-slate-100 px-2.5 py-1 font-bold">{company.status === 'active' ? 'Cliente' : company.status === 'inactive' ? 'Inactiva' : 'Prospecto'}</span></div>
               </article>;

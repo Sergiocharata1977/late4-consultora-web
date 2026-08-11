@@ -56,6 +56,9 @@ try {
       $source = [string]$values['F']
       if ([string]::IsNullOrWhiteSpace($source) -and $contact -match '^https?://') { $source = $contact; $contact = '' }
 
+      # El CRM comercial sólo debe recibir empresas identificables y contactables.
+      if ($isPark -or [string]::IsNullOrWhiteSpace([string]$values['D']) -or [string]::IsNullOrWhiteSpace($contact)) { continue }
+
       $records.Add([ordered]@{
         name = $name
         location = ([string]$values['A']).Trim()
@@ -63,7 +66,7 @@ try {
         industry = ([string]$values['D']).Trim()
         publicContact = $contact.Trim()
         sourceUrl = $source.Trim()
-        organizationType = if ($isPark) { 'industrial_park' } else { 'company' }
+        organizationType = 'company'
         sourceSheet = $sheetName
       })
     }

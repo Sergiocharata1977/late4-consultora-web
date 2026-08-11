@@ -65,8 +65,8 @@ npm run start
 ## Actualizacion 2026-08-11 - Base de parques industriales
 
 - Se adapto Empresas para distinguir empresas de parques/distritos industriales y guardar ubicacion, parque asociado, contacto publico y fuente.
-- Se incorporo una base normalizada de 160 prospectos: 49 empresas verificadas y 111 parques/distritos de Provincia de Buenos Aires, CABA, Rosario y Gran Rosario.
-- La pantalla Empresas incluye una importacion idempotente: usa identificadores deterministas y omite coincidencias existentes para evitar duplicados.
+- Se incorporo una base depurada de 42 empresas con nombre, actividad y dato concreto de contacto; se excluyen parques/distritos y empresas sin contacto util.
+- La pantalla Empresas incluye una sincronizacion idempotente: usa identificadores deterministas, omite coincidencias y elimina automaticamente registros anteriores de esta importacion que ya no cumplen los criterios, sin tocar altas manuales.
 - El dataset versionado esta en `src/data/industrial-parks.json`; `scripts/generate-industrial-parks-data.ps1` permite regenerarlo desde la planilla fuente.
 
 ## Actualizacion 2026-06-27 - Ajuste de ancho visual
