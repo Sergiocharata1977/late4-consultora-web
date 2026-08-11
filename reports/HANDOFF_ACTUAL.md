@@ -62,6 +62,13 @@ npm run start
 - Acciones comerciales se almacenan en `crmActions` con tipo llamada, visita, email, reunion, tarea u otra; pueden vincular empresa, contacto y oportunidad.
 - El alta/edicion interna de oportunidades selecciona la empresa desde `crmCompanies` y persiste `companyId` junto al nombre visible; los leads web historicos sin identificador siguen siendo legibles.
 
+## Actualizacion 2026-08-11 - Base de parques industriales
+
+- Se adapto Empresas para distinguir empresas de parques/distritos industriales y guardar ubicacion, parque asociado, contacto publico y fuente.
+- Se incorporo una base normalizada de 160 prospectos: 49 empresas verificadas y 111 parques/distritos de Provincia de Buenos Aires, CABA, Rosario y Gran Rosario.
+- La pantalla Empresas incluye una importacion idempotente: usa identificadores deterministas y omite coincidencias existentes para evitar duplicados.
+- El dataset versionado esta en `src/data/industrial-parks.json`; `scripts/generate-industrial-parks-data.ps1` permite regenerarlo desde la planilla fuente.
+
 ## Actualizacion 2026-06-27 - Ajuste de ancho visual
 
 - Se redujo el ancho maximo del contenido principal de la landing de `max-w-7xl` a una clase comun `.site-container` con `max-w-5xl` (1024px), equivalente a ~20% menos.
