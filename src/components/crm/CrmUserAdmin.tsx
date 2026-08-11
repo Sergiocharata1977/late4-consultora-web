@@ -3,9 +3,9 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { deleteApp, initializeApp } from 'firebase/app';
 import { createUserWithEmailAndPassword, deleteUser, getAuth } from 'firebase/auth';
-import { collection, doc, onSnapshot, orderBy, query, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
-import { Shield, UserPlus, Users, X } from 'lucide-react';
-import { db, firebaseConfig } from '@/lib/firebase';
+import { collection, deleteDoc, doc, onSnapshot, orderBy, query, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
+import { Shield, Trash2, UserPlus, Users, X } from 'lucide-react';
+import { auth, db, firebaseConfig } from '@/lib/firebase';
 
 type CrmUser = {
   id: string;
@@ -19,6 +19,7 @@ export default function CrmUserAdmin() {
   const [users, setUsers] = useState<CrmUser[]>([]);
   const [open, setOpen] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const [error, setError] = useState('');
   const [form, setForm] = useState({ displayName: '', email: '', password: '', role: 'operator' as CrmUser['role'] });
 
@@ -59,10 +60,22 @@ export default function CrmUserAdmin() {
     catch (toggleError) { setError(toggleError instanceof Error ? toggleError.message : 'No se pudo actualizar el usuario.'); }
   };
 
+  const removeAccess = async (user: CrmUser) => {
+    if (user.id === auth.currentUser?.uid) {
+      setError('No podés eliminar tu propio acceso mientras estás usando el CRM.');
+      return;
+    }
+    if (!window.confirm(`¿Eliminar definitivamente el acceso de ${user.displayName || user.email}?`)) return;
+    setDeletingId(user.id); setError('');
+    try { await deleteDoc(doc(db, 'users', user.id)); }
+    catch (deleteError) { setError(deleteError instanceof Error ? deleteError.message : 'No se pudo eliminar el acceso.'); }
+    finally { setDeletingId(null); }
+  };
+
   return <div>
     <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end"><div><p className="eyebrow">Administración</p><h1 className="mt-2 text-3xl font-extrabold">Usuarios</h1><p className="mt-2 text-sm text-late4-slate">Accesos internos al CRM y permisos de operación.</p></div><button className="btn-primary gap-2" onClick={() => setOpen(true)}><UserPlus size={17} /> Nuevo usuario</button></div>
     {error && <p className="mt-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>}
-    <section className="mt-7 overflow-hidden rounded-xl border border-late4-ink/5 bg-white shadow-sm"><div className="overflow-x-auto"><table className="w-full min-w-[700px] text-left text-sm"><thead className="bg-late4-paper/70 text-[11px] uppercase tracking-wider text-late4-slate"><tr><th className="px-5 py-3">Usuario</th><th className="px-5 py-3">Rol</th><th className="px-5 py-3">Estado</th><th className="px-5 py-3 text-right">Acción</th></tr></thead><tbody className="divide-y divide-late4-ink/5">{users.map((user) => <tr key={user.id}><td className="px-5 py-4"><div className="flex items-center gap-3"><div className="grid h-10 w-10 place-items-center rounded-full bg-late4-teal-soft font-extrabold text-late4-teal">{(user.displayName || user.email).slice(0, 1).toUpperCase()}</div><div><p className="font-extrabold">{user.displayName || 'Sin nombre'}</p><p className="text-xs text-late4-slate">{user.email}</p></div></div></td><td className="px-5 py-4"><span className="inline-flex items-center gap-1.5 rounded-full bg-late4-paper px-2.5 py-1 text-xs font-bold"><Shield size={13} />{user.role === 'admin' ? 'Administrador' : 'Operador'}</span></td><td className="px-5 py-4"><span className={`rounded-full px-2.5 py-1 text-xs font-bold ${user.active ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-600'}`}>{user.active ? 'Activo' : 'Inactivo'}</span></td><td className="px-5 py-4 text-right"><button className="rounded-lg border border-late4-ink/10 px-3 py-2 text-xs font-bold hover:bg-late4-paper" onClick={() => toggleActive(user)}>{user.active ? 'Desactivar' : 'Activar'}</button></td></tr>)}{!users.length && <tr><td className="px-5 py-10 text-center text-late4-slate" colSpan={4}><Users className="mx-auto mb-2" size={22} />No hay usuarios.</td></tr>}</tbody></table></div></section>
+    <section className="mt-7 overflow-hidden rounded-xl border border-late4-ink/5 bg-white shadow-sm"><div className="overflow-x-auto"><table className="w-full min-w-[700px] text-left text-sm"><thead className="bg-late4-paper/70 text-[11px] uppercase tracking-wider text-late4-slate"><tr><th className="px-5 py-3">Usuario</th><th className="px-5 py-3">Rol</th><th className="px-5 py-3">Estado</th><th className="px-5 py-3 text-right">Acciones</th></tr></thead><tbody className="divide-y divide-late4-ink/5">{users.map((user) => { const isCurrentUser = user.id === auth.currentUser?.uid; return <tr key={user.id}><td className="px-5 py-4"><div className="flex items-center gap-3"><div className="grid h-10 w-10 place-items-center rounded-full bg-late4-teal-soft font-extrabold text-late4-teal">{(user.displayName || user.email).slice(0, 1).toUpperCase()}</div><div><p className="font-extrabold">{user.displayName || 'Sin nombre'}{isCurrentUser && <span className="ml-2 text-[10px] uppercase text-late4-teal">Tu cuenta</span>}</p><p className="text-xs text-late4-slate">{user.email}</p></div></div></td><td className="px-5 py-4"><span className="inline-flex items-center gap-1.5 rounded-full bg-late4-paper px-2.5 py-1 text-xs font-bold"><Shield size={13} />{user.role === 'admin' ? 'Administrador' : 'Operador'}</span></td><td className="px-5 py-4"><span className={`rounded-full px-2.5 py-1 text-xs font-bold ${user.active ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-600'}`}>{user.active ? 'Activo' : 'Inactivo'}</span></td><td className="px-5 py-4"><div className="flex justify-end gap-2"><button className="rounded-lg border border-late4-ink/10 px-3 py-2 text-xs font-bold hover:bg-late4-paper disabled:cursor-not-allowed disabled:opacity-30" disabled={isCurrentUser} onClick={() => toggleActive(user)}>{user.active ? 'Desactivar' : 'Activar'}</button><button aria-label={`Eliminar ${user.displayName || user.email}`} className="grid h-9 w-9 place-items-center rounded-lg bg-red-50 text-red-600 hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-30" disabled={isCurrentUser || deletingId === user.id} onClick={() => removeAccess(user)} title={isCurrentUser ? 'No podés eliminar tu propia cuenta' : 'Eliminar acceso'}><Trash2 size={15} /></button></div></td></tr>; })}{!users.length && <tr><td className="px-5 py-10 text-center text-late4-slate" colSpan={4}><Users className="mx-auto mb-2" size={22} />No hay usuarios.</td></tr>}</tbody></table></div></section>
     {open && <div className="fixed inset-0 z-50 grid place-items-center bg-late4-ink/60 p-4 backdrop-blur-sm"><section className="w-full max-w-lg rounded-2xl bg-white shadow-2xl"><header className="flex items-center justify-between border-b border-late4-ink/10 px-6 py-5"><div><p className="eyebrow">Acceso CRM</p><h2 className="mt-1 text-2xl font-extrabold">Nuevo usuario</h2></div><button className="grid h-9 w-9 place-items-center rounded-lg bg-late4-paper" onClick={() => setOpen(false)}><X size={17} /></button></header><form className="space-y-4 p-6" onSubmit={createUser}><Field label="Nombre completo"><input required value={form.displayName} onChange={(event) => setForm({ ...form, displayName: event.target.value })} /></Field><Field label="Email"><input required type="email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} /></Field><Field label="Contraseña inicial"><input minLength={8} required type="text" value={form.password} onChange={(event) => setForm({ ...form, password: event.target.value })} /></Field><Field label="Rol"><select value={form.role} onChange={(event) => setForm({ ...form, role: event.target.value as CrmUser['role'] })}><option value="operator">Operador</option><option value="admin">Administrador</option></select></Field><div className="flex justify-end gap-3 border-t border-late4-ink/10 pt-5"><button className="btn-secondary" onClick={() => setOpen(false)} type="button">Cancelar</button><button className="btn-primary" disabled={saving} type="submit">{saving ? 'Creando…' : 'Crear usuario'}</button></div></form></section></div>}
   </div>;
 }
