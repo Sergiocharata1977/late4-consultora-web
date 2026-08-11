@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useState } from 'react';
 import { deleteApp, initializeApp } from 'firebase/app';
-import { createUserWithEmailAndPassword, deleteUser, getAuth } from 'firebase/auth';
+import { createUserWithEmailAndPassword, deleteUser, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth';
 import { collection, deleteDoc, doc, onSnapshot, orderBy, query, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
 import { Shield, Trash2, UserPlus, Users, X } from 'lucide-react';
 import { auth, db, firebaseConfig } from '@/lib/firebase';
@@ -32,10 +32,9 @@ export default function CrmUserAdmin() {
     const secondaryApp = initializeApp(firebaseConfig, `create-user-${Date.now()}`);
     const secondaryAuth = getAuth(secondaryApp);
     let credential;
-    try {
-      credential = await createUserWithEmailAndPassword(secondaryAuth, form.email.trim(), form.password);
-      await setDoc(doc(db, 'users', credential.user.uid), {
-        uid: credential.user.uid,
+    const saveProfile = async (uid: string) => {
+      await setDoc(doc(db, 'users', uid), {
+        uid,
         email: form.email.trim().toLowerCase(),
         displayName: form.displayName.trim(),
         role: form.role,
@@ -45,10 +44,26 @@ export default function CrmUserAdmin() {
       });
       setForm({ displayName: '', email: '', password: '', role: 'operator' });
       setOpen(false);
+    };
+    try {
+      credential = await createUserWithEmailAndPassword(secondaryAuth, form.email.trim(), form.password);
+      await saveProfile(credential.user.uid);
     } catch (createError) {
       if (credential) await deleteUser(credential.user).catch(() => undefined);
       const code = typeof createError === 'object' && createError && 'code' in createError ? String(createError.code) : '';
-      setError(code === 'auth/email-already-in-use' ? 'Ese email ya está registrado.' : createError instanceof Error ? createError.message : 'No se pudo crear el usuario.');
+      if (code === 'auth/email-already-in-use') {
+        try {
+          const existingCredential = await signInWithEmailAndPassword(secondaryAuth, form.email.trim(), form.password);
+          await saveProfile(existingCredential.user.uid);
+        } catch {
+          await sendPasswordResetEmail(secondaryAuth, form.email.trim());
+          setOpen(false);
+          setForm({ displayName: '', email: '', password: '', role: 'operator' });
+          setError('La cuenta ya existía en Firebase. Enviamos un correo para cambiar la contraseña. Después de cambiarla, volvé a crear el usuario usando la nueva contraseña para restaurar su acceso.');
+        }
+      } else {
+        setError(createError instanceof Error ? createError.message : 'No se pudo crear el usuario.');
+      }
     } finally {
       await deleteApp(secondaryApp);
       setSaving(false);
