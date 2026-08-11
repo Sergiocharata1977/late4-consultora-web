@@ -1,8 +1,8 @@
 'use client';
 
-import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
-import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc, writeBatch } from 'firebase/firestore';
-import { Building2, Download, ExternalLink, LayoutGrid, Link2, List, Mail, MapPin, Pencil, Phone, Plus, Search, X } from 'lucide-react';
+import { FormEvent, useEffect, useMemo, useState } from 'react';
+import { addDoc, collection, deleteDoc, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc, writeBatch } from 'firebase/firestore';
+import { Building2, Download, ExternalLink, LayoutGrid, Link2, List, Mail, MapPin, Pencil, Phone, Plus, Search, Trash2, X } from 'lucide-react';
 import { db } from '@/lib/firebase';
 import industrialParksData from '@/data/industrial-parks.json';
 
@@ -52,13 +52,11 @@ export default function CrmDirectory({ view }: { view: 'companies' | 'contacts' 
   const [companyView, setCompanyView] = useState<'cards' | 'list'>('cards');
   const [importing, setImporting] = useState(false);
   const [notice, setNotice] = useState('');
-  const [companiesLoaded, setCompaniesLoaded] = useState(false);
-  const automaticImportAttempted = useRef(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   useEffect(() => {
     const stopCompanies = onSnapshot(query(collection(db, 'crmCompanies'), orderBy('createdAt', 'desc')), (snapshot) => {
       setCompanies(snapshot.docs.map((item) => ({ id: item.id, ...item.data() } as Company)));
-      setCompaniesLoaded(true);
     }, (snapshotError) => setError(snapshotError.message));
     const stopPeople = onSnapshot(query(collection(db, 'crmContacts'), orderBy('createdAt', 'desc')), (snapshot) => {
       setPeople(snapshot.docs.map((item) => ({ id: item.id, ...item.data(), companyIds: item.data().companyIds ?? [] } as Person)));
@@ -90,6 +88,17 @@ export default function CrmDirectory({ view }: { view: 'companies' | 'contacts' 
     setEditingId(person.id);
     setPersonForm({ name: person.name, position: person.position ?? '', email: person.email ?? '', phone: person.phone ?? '', companyIds: person.companyIds, notes: person.notes ?? '', active: person.active !== false });
     setOpen(true);
+  };
+
+  const deleteCompany = async (company: Company) => {
+    if (!window.confirm(`¿Eliminar definitivamente la empresa "${company.name}"?`)) return;
+    setDeletingId(company.id); setError(''); setNotice('');
+    try {
+      await deleteDoc(doc(db, 'crmCompanies', company.id));
+      setNotice(`Se eliminó la empresa ${company.name}.`);
+    } catch (deleteError) {
+      setError(deleteError instanceof Error ? deleteError.message : 'No se pudo eliminar la empresa.');
+    } finally { setDeletingId(null); }
   };
 
   const save = async (event: FormEvent) => {
@@ -133,14 +142,6 @@ export default function CrmDirectory({ view }: { view: 'companies' | 'contacts' 
     } finally { setImporting(false); }
   };
 
-  useEffect(() => {
-    if (view !== 'companies' || !companiesLoaded || automaticImportAttempted.current) return;
-    automaticImportAttempted.current = true;
-    void importIndustrialParks();
-    // La importacion se ejecuta una sola vez al recibir el primer snapshot autorizado.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [companiesLoaded, view]);
-
   return (
     <div>
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
@@ -164,7 +165,7 @@ export default function CrmDirectory({ view }: { view: 'companies' | 'contacts' 
               const related = relatedCompanies(company);
               const contacts = people.filter((person) => person.companyIds.includes(company.id));
               return <article className="rounded-xl border border-late4-ink/5 bg-white p-5 shadow-sm" key={company.id}>
-                <div className="flex items-start justify-between gap-3"><div className="flex gap-3"><div className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-late4-teal-soft text-late4-teal"><Building2 size={20} /></div><div><span className="text-[10px] font-extrabold uppercase tracking-wider text-late4-teal">Empresa</span><h2 className="mt-1 font-extrabold">{company.name}</h2><p className="mt-1 text-xs text-late4-slate"><strong>Actividad:</strong> {company.industry || company.legalName || 'Sin actividad registrada'}</p></div></div><button className="grid h-9 w-9 place-items-center rounded-lg bg-late4-paper text-late4-slate" onClick={() => editCompany(company)}><Pencil size={15} /></button></div>
+                <div className="flex items-start justify-between gap-3"><div className="flex gap-3"><div className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-late4-teal-soft text-late4-teal"><Building2 size={20} /></div><div><span className="text-[10px] font-extrabold uppercase tracking-wider text-late4-teal">Empresa</span><h2 className="mt-1 font-extrabold">{company.name}</h2><p className="mt-1 text-xs text-late4-slate"><strong>Actividad:</strong> {company.industry || company.legalName || 'Sin actividad registrada'}</p></div></div><div className="flex shrink-0 gap-1"><button aria-label={`Editar ${company.name}`} className="grid h-9 w-9 place-items-center rounded-lg bg-late4-paper text-late4-slate" onClick={() => editCompany(company)}><Pencil size={15} /></button><button aria-label={`Eliminar ${company.name}`} className="grid h-9 w-9 place-items-center rounded-lg bg-red-50 text-red-600 hover:bg-red-100" disabled={deletingId === company.id} onClick={() => deleteCompany(company)}><Trash2 size={15} /></button></div></div>
                 {(company.location || company.parkName) && <div className="mt-4 space-y-1 text-xs text-late4-slate">{company.location && <p className="flex items-center gap-1.5"><MapPin size={13} />{company.location}</p>}{company.parkName && <p className="flex items-center gap-1.5"><Building2 size={13} />{company.parkName}</p>}</div>}
                 {(company.publicContact || company.sourceUrl) && <div className="mt-3 flex flex-wrap gap-2 text-xs">{company.publicContact && <span className="font-semibold text-late4-slate"><strong>Contacto:</strong> {company.publicContact}</span>}{company.sourceUrl && <a className="inline-flex items-center gap-1 font-bold text-late4-teal" href={company.sourceUrl} rel="noreferrer" target="_blank">Fuente <ExternalLink size={11} /></a>}</div>}
                 {company.groupName && <div className="mt-4 rounded-lg bg-late4-paper p-3"><p className="flex items-center gap-1.5 text-xs font-extrabold uppercase text-late4-teal"><Link2 size={13} /> Grupo {company.groupName}</p><p className="mt-1 text-xs text-late4-slate">{related.length ? `Relacionada con ${related.map((item) => item.name).join(', ')}` : 'Primera empresa registrada de este grupo'}</p></div>}
@@ -174,7 +175,7 @@ export default function CrmDirectory({ view }: { view: 'companies' | 'contacts' 
             {!filteredCompanies.length && <p className="col-span-full py-10 text-center text-sm text-late4-slate">Todavía no hay empresas registradas.</p>}
           </div>
         ) : view === 'companies' ? (
-          <div className="overflow-x-auto"><table className="w-full min-w-[980px] text-left text-sm"><thead className="bg-late4-paper/70 text-[11px] uppercase tracking-wider text-late4-slate"><tr><th className="px-5 py-3">Empresa</th><th className="px-5 py-3">Ubicación</th><th className="px-5 py-3">Parque / distrito</th><th className="px-5 py-3">Actividad</th><th className="px-5 py-3">Contactos</th><th className="px-5 py-3">Estado</th><th className="px-5 py-3 text-right">Acción</th></tr></thead><tbody className="divide-y divide-late4-ink/5">{filteredCompanies.map((company) => <tr key={company.id}><td className="px-5 py-4"><p className="font-extrabold">{company.name}</p><p className="text-xs text-late4-slate">{company.organizationType === 'industrial_park' ? 'Parque / distrito' : company.legalName || company.taxId || '—'}</p></td><td className="px-5 py-4 text-late4-slate">{company.location || '—'}</td><td className="px-5 py-4 text-late4-slate">{company.parkName || '—'}</td><td className="px-5 py-4 text-late4-slate">{company.industry || '—'}</td><td className="px-5 py-4 font-bold">{people.filter((person) => person.companyIds.includes(company.id)).length}</td><td className="px-5 py-4">{company.status === 'active' ? 'Cliente' : company.status === 'inactive' ? 'Inactiva' : 'Prospecto'}</td><td className="px-5 py-4 text-right"><button className="grid h-9 w-9 place-items-center rounded-lg bg-late4-paper text-late4-slate" onClick={() => editCompany(company)}><Pencil size={15} /></button></td></tr>)}{!filteredCompanies.length && <tr><td className="px-5 py-10 text-center text-late4-slate" colSpan={7}>Todavía no hay empresas registradas.</td></tr>}</tbody></table></div>
+          <div className="overflow-x-auto"><table className="w-full min-w-[980px] text-left text-sm"><thead className="bg-late4-paper/70 text-[11px] uppercase tracking-wider text-late4-slate"><tr><th className="px-5 py-3">Empresa</th><th className="px-5 py-3">Ubicación</th><th className="px-5 py-3">Parque / distrito</th><th className="px-5 py-3">Actividad</th><th className="px-5 py-3">Contactos</th><th className="px-5 py-3">Estado</th><th className="px-5 py-3 text-right">Acciones</th></tr></thead><tbody className="divide-y divide-late4-ink/5">{filteredCompanies.map((company) => <tr key={company.id}><td className="px-5 py-4"><p className="font-extrabold">{company.name}</p><p className="text-xs text-late4-slate">{company.organizationType === 'industrial_park' ? 'Parque / distrito' : company.legalName || company.taxId || '—'}</p></td><td className="px-5 py-4 text-late4-slate">{company.location || '—'}</td><td className="px-5 py-4 text-late4-slate">{company.parkName || '—'}</td><td className="px-5 py-4 text-late4-slate">{company.industry || '—'}</td><td className="px-5 py-4 font-bold">{people.filter((person) => person.companyIds.includes(company.id)).length}</td><td className="px-5 py-4">{company.status === 'active' ? 'Cliente' : company.status === 'inactive' ? 'Inactiva' : 'Prospecto'}</td><td className="px-5 py-4"><div className="flex justify-end gap-1"><button aria-label={`Editar ${company.name}`} className="grid h-9 w-9 place-items-center rounded-lg bg-late4-paper text-late4-slate" onClick={() => editCompany(company)}><Pencil size={15} /></button><button aria-label={`Eliminar ${company.name}`} className="grid h-9 w-9 place-items-center rounded-lg bg-red-50 text-red-600 hover:bg-red-100" disabled={deletingId === company.id} onClick={() => deleteCompany(company)}><Trash2 size={15} /></button></div></td></tr>)}{!filteredCompanies.length && <tr><td className="px-5 py-10 text-center text-late4-slate" colSpan={7}>Todavía no hay empresas registradas.</td></tr>}</tbody></table></div>
         ) : (
           <div className="overflow-x-auto"><table className="w-full min-w-[760px] text-left text-sm"><thead className="bg-late4-paper/70 text-[11px] uppercase tracking-wider text-late4-slate"><tr><th className="px-5 py-3">Contacto</th><th className="px-5 py-3">Cargo</th><th className="px-5 py-3">Empresas vinculadas</th><th className="px-5 py-3">Estado</th><th className="px-5 py-3 text-right">Acciones</th></tr></thead><tbody className="divide-y divide-late4-ink/5">
             {filteredPeople.map((person) => <tr key={person.id}><td className="px-5 py-4"><p className="font-extrabold">{person.name}</p><div className="mt-1 flex gap-3 text-xs text-late4-teal">{person.email && <a className="inline-flex items-center gap-1" href={`mailto:${person.email}`}><Mail size={12} />{person.email}</a>}{person.phone && <span className="inline-flex items-center gap-1"><Phone size={12} />{person.phone}</span>}</div></td><td className="px-5 py-4 text-late4-slate">{person.position || '—'}</td><td className="px-5 py-4"><div className="flex flex-wrap gap-1.5">{person.companyIds.map((id) => <span className="rounded-full bg-late4-teal-soft px-2.5 py-1 text-xs font-bold text-late4-teal" key={id}>{companies.find((company) => company.id === id)?.name ?? 'Empresa eliminada'}</span>)}{!person.companyIds.length && <span className="text-late4-slate">Sin empresa</span>}</div></td><td className="px-5 py-4"><span className={`rounded-full px-2.5 py-1 text-xs font-bold ${person.active !== false ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-600'}`}>{person.active !== false ? 'Activo' : 'Inactivo'}</span></td><td className="px-5 py-4 text-right"><button className="grid h-9 w-9 place-items-center rounded-lg bg-late4-paper text-late4-slate" onClick={() => editPerson(person)}><Pencil size={15} /></button></td></tr>)}
