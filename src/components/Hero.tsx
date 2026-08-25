@@ -23,8 +23,8 @@ export default function Hero() {
             </p>
 
             <h1 className="text-4xl font-bold leading-[1.1] tracking-tight text-l4-night md:text-5xl">
-              De datos dispersos a una{' '}
-              <span className="block text-l4-blue">plataforma unificada</span>
+              Integramos CRM, ERP y Calidad ISO 9001{' '}
+              <span className="block text-l4-blue">en una sola plataforma</span>
             </h1>
 
             <p className="mt-6 max-w-xl text-sm leading-relaxed text-l4-muted md:text-base">
