@@ -13,31 +13,66 @@ html {
 body {
   margin: 0;
   font-family: var(--font-inter), sans-serif;
-  background: #f7f7f6;
+  background: #ffffff;
 }
 
-.font-editorial {
-  font-family: var(--font-serif), serif;
-}
-
-.section-title {
-  @apply text-3xl font-extrabold leading-tight text-late4-ink md:text-4xl;
-}
+/* ---------------------------------------------------------------
+   Landing (rediseno: gestion integrada)
+   --------------------------------------------------------------- */
 
 .site-container {
   @apply mx-auto max-w-6xl;
 }
 
-.section-title-dark {
-  @apply text-3xl font-extrabold leading-tight text-white md:text-4xl;
+.l4-eyebrow {
+  @apply font-mono text-[11px] uppercase tracking-[0.16em] text-l4-blue;
+}
+
+.l4-title {
+  @apply text-3xl font-bold leading-[1.15] tracking-tight text-l4-night md:text-4xl;
+}
+
+.l4-lead {
+  @apply text-sm leading-relaxed text-l4-muted md:text-base;
+}
+
+.l4-card {
+  @apply rounded-xl border border-l4-line bg-white;
+}
+
+.l4-icon-box {
+  @apply flex h-10 w-10 items-center justify-center rounded-lg bg-l4-blue-soft text-l4-blue;
+}
+
+.l4-chip {
+  @apply inline-flex items-center rounded-md bg-l4-surface px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-l4-muted;
+}
+
+.l4-btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg bg-l4-blue px-5 py-3 font-mono text-[11px] font-bold uppercase tracking-[0.14em] text-white transition hover:bg-l4-blue-dark;
+}
+
+.l4-btn-outline {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg border border-l4-line bg-white px-5 py-3 font-mono text-[11px] font-bold uppercase tracking-[0.14em] text-l4-night transition hover:border-l4-blue hover:text-l4-blue;
+}
+
+.l4-grid-bg {
+  background-image:
+    linear-gradient(to right, rgba(11, 18, 32, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(11, 18, 32, 0.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+/* ---------------------------------------------------------------
+   Estilos heredados (en uso por el CRM interno)
+   --------------------------------------------------------------- */
+
+.section-title {
+  @apply text-3xl font-extrabold leading-tight text-late4-ink md:text-4xl;
 }
 
 .section-subtitle {
   @apply max-w-3xl text-base leading-relaxed text-late4-slate md:text-lg;
-}
-
-.section-subtitle-dark {
-  @apply max-w-3xl text-base leading-relaxed text-white/70 md:text-lg;
 }
 
 .eyebrow {
@@ -50,8 +85,4 @@ body {
 
 .btn-secondary {
   @apply inline-flex items-center justify-center rounded-sm border border-late4-ink/15 bg-white px-6 py-3 text-sm font-extrabold text-late4-ink transition hover:border-late4-teal hover:text-late4-teal;
-}
-
-.glass-card {
-  @apply rounded-sm border border-white/10 bg-white/[0.07] shadow-2xl shadow-late4-blue-deep/25 backdrop-blur-md;
 }

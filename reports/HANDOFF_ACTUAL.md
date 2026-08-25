@@ -101,3 +101,15 @@ npm run start
 - Se agrego `Don Juan GIS` como tercer proyecto, con estado `En desarrollo avanzado - 80%`.
 - Archivo tocado: `src/components/SoftwareSection.tsx`.
 - Validacion: `git diff --check` OK. `npm run type-check` no pudo ejecutarse porque `tsc` no esta disponible localmente; falta instalar dependencias en este repo.
+
+## Actualizacion 2026-08-25 - Rediseno landing segun propuesta Stitch + PDF Gestion Integrada
+
+- Se adapto toda la landing publica al diseno propuesto (Stitch) tomando el copy del PDF `Presentacion_Consultora_Late4_Gestion_Integrada_v2`.
+- Nuevo lenguaje visual: fondo claro, azul primario `#1652F0`, verde `#12A150` para checks/estado, tipografia Inter + JetBrains Mono para labels y botones (mayusculas con tracking).
+- Paleta nueva `l4-*` agregada en `tailwind.config.ts`; la paleta `late4-*` se conserva intacta porque la usa el CRM interno.
+- Clases nuevas en `globals.css`: `l4-btn`, `l4-btn-outline`, `l4-card`, `l4-chip`, `l4-icon-box`, `l4-title`, `l4-lead`, `l4-eyebrow`, `l4-grid-bg`. Se conservan `btn-primary`, `btn-secondary`, `eyebrow`, `section-title` y `section-subtitle` porque los usa el CRM.
+- Secciones: Hero "De datos dispersos a una plataforma unificada" con tarjeta "Mapeo e Integracion" (Ventas/Costos/Produccion/Calidad); Servicios en bento grid de 5 tarjetas; Metodo Late4 en 4 pasos (Entender, Ordenar, Medir, Digitalizar, con el paso 4 destacado); nueva seccion "La rentabilidad es una ciencia exacta" con panel de indicadores; Proyectos restilado; Contacto con datos del PDF (Cont. Sergio Javier De Filippi, movil 3731 511514, WhatsApp) y bloque "Que podemos medir".
+- Componentes nuevos: `src/components/Late4Mark.tsx` (isotipo) y `src/components/ValueSection.tsx`. Se elimino `src/components/ProblemSection.tsx`.
+- Archivos tocados: `tailwind.config.ts`, `src/app/layout.tsx`, `src/app/globals.css`, `src/app/page.tsx`, `Header.tsx`, `Hero.tsx`, `ServicesSection.tsx`, `MethodSection.tsx`, `SoftwareSection.tsx`, `Footer.tsx`.
+- Validacion estatica (regla del repo, sin build local): `git diff --check` OK, sin caracteres rotos (UTF-8 verificado), sin referencias a clases o componentes eliminados, todos los tokens `l4-*` usados estan definidos.
+- Pendiente: commit, push y validacion del deployment en Vercel.

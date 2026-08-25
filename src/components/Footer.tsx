@@ -1,44 +1,65 @@
-import { Globe2, Instagram, Linkedin } from 'lucide-react';
+import Late4Mark from './Late4Mark';
+
+type FooterLink = { label: string; href: string; external?: boolean };
+type FooterGroup = { title: string; links: FooterLink[] };
+
+const groups: FooterGroup[] = [
+  {
+    title: 'Legal',
+    links: [
+      { label: 'Política de privacidad', href: '#contacto' },
+      { label: 'Términos de servicio', href: '#contacto' },
+    ],
+  },
+  {
+    title: 'Contacto',
+    links: [
+      { label: 'LinkedIn', href: 'https://www.linkedin.com', external: true },
+      { label: 'Escribinos', href: 'mailto:info@late4.com.ar' },
+    ],
+  },
+];
 
 export default function Footer() {
-  const groups = [
-    { title: 'Navegacion', links: ['Inicio', 'Servicios', 'Proyectos'] },
-    { title: 'Social', links: ['LinkedIn', 'Contacto'] },
-    { title: 'Legal', links: ['Privacidad'] },
-  ];
-
   return (
-    <footer className="bg-late4-blue-deep px-5 py-12 text-white md:px-8">
-      <div className="site-container grid gap-10 md:grid-cols-[1.3fr_2fr]">
+    <footer className="border-t border-l4-line bg-white px-5 py-14 md:px-8">
+      <div className="site-container grid gap-10 md:grid-cols-[1.4fr_1fr]">
         <div>
-          <div className="text-2xl font-extrabold text-late4-blue-bright">
-            Late4 <span className="text-white/75">by De Filippi</span>
+          <div className="flex items-center gap-2 text-lg font-bold tracking-tight text-l4-night">
+            <Late4Mark className="h-5 w-5 text-l4-blue" />
+            Late4
           </div>
-          <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/65">
-            Consultoria estrategica y tecnologica para PyMEs que necesitan orden, trazabilidad y crecimiento sostenible.
+          <p className="mt-4 max-w-xs text-sm leading-relaxed text-l4-muted">
+            Transformamos archivos sueltos en información útil para gestionar, controlar y mejorar.
           </p>
         </div>
 
-        <div className="grid gap-8 sm:grid-cols-3">
+        <div className="grid gap-8 sm:grid-cols-2">
           {groups.map((group) => (
             <div key={group.title}>
-              <h4 className="mb-4 text-xs font-extrabold uppercase text-late4-blue-bright">{group.title}</h4>
-              <ul className="space-y-3 text-sm text-white/68">
+              <h3 className="mb-4 font-mono text-[10px] uppercase tracking-[0.16em] text-l4-night">{group.title}</h3>
+              <ul className="space-y-3 text-sm text-l4-muted">
                 {group.links.map((link) => (
-                  <li key={link}>{link}</li>
+                  <li key={link.label}>
+                    <a
+                      href={link.href}
+                      {...(link.external ? { target: '_blank', rel: 'noreferrer' } : {})}
+                      className="transition hover:text-l4-blue"
+                    >
+                      {link.label}
+                    </a>
+                  </li>
                 ))}
               </ul>
             </div>
           ))}
         </div>
       </div>
-      <div className="site-container mt-10 flex flex-col gap-4 border-t border-white/10 pt-6 text-xs text-white/50 md:flex-row md:items-center md:justify-between">
-        <p>2026 Late4 by De Filippi. Todos los derechos reservados.</p>
-        <div className="flex gap-3">
-          <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15"><Globe2 size={15} /></span>
-          <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15"><Instagram size={15} /></span>
-          <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15"><Linkedin size={15} /></span>
-        </div>
+
+      <div className="site-container mt-12 border-t border-l4-line pt-6">
+        <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-l4-green">
+          &copy; 2026 Late4 Consultora. Todos los derechos reservados.
+        </p>
       </div>
     </footer>
   );

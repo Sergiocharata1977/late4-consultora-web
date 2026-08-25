@@ -1,33 +1,69 @@
-export default function MethodSection() {
-  const steps = [
-    { number: '1', title: 'Diagnostico', description: 'Identificacion de cuellos de botella.' },
-    { number: '2', title: 'Diseno', description: 'Modelado de procesos eficientes.' },
-    { number: '3', title: 'Digitalizacion', description: 'Implementacion de herramientas tech.' },
-    { number: '4', title: 'Implementacion', description: 'Puesta en marcha y capacitacion.' },
-    { number: '5', title: 'Mejora continua', description: 'Auditoria y optimizacion constante.' },
-  ];
+import { Cpu, Gauge, ListChecks, Search } from 'lucide-react';
 
+const steps = [
+  {
+    number: '01',
+    icon: Search,
+    title: 'Entender',
+    description: 'Analizamos cómo funciona la empresa, identificando cuellos de botella y flujos de información ocultos.',
+  },
+  {
+    number: '02',
+    icon: ListChecks,
+    title: 'Ordenar',
+    description: 'Estandarizamos procesos, definimos responsabilidades claras y estructuramos registros de datos.',
+  },
+  {
+    number: '03',
+    icon: Gauge,
+    title: 'Medir',
+    description: 'Implementamos sistemas de medición para costos y calidad, estableciendo línea base para mejoras.',
+  },
+  {
+    number: '04',
+    icon: Cpu,
+    title: 'Digitalizar',
+    description: 'La tecnología se convierte en el soporte automatizado del método de gestión ya ordenado.',
+    highlight: true,
+  },
+];
+
+export default function MethodSection() {
   return (
-    <section id="metodo" className="bg-late4-paper px-5 py-24 text-late4-ink md:px-8">
+    <section id="metodo" className="bg-l4-band px-5 py-24 md:px-8">
       <div className="site-container">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="section-title">El Metodo Late4</h2>
-          <p className="mt-4 text-sm leading-relaxed text-late4-slate">
-            Un camino estructurado hacia la madurez digital y operativa.
+          <h2 className="l4-title">El Método Late4</h2>
+          <p className="l4-lead mt-4">
+            No vendemos solo software ni solo certificaciones. Construimos un método de gestión.
           </p>
         </div>
 
-        <div className="relative mt-16 grid gap-8 md:grid-cols-5">
-          <div className="absolute left-0 right-0 top-8 hidden h-px bg-late4-ink/15 md:block" aria-hidden="true" />
-          {steps.map((step) => (
-            <article key={step.number} className="relative text-center">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-sm border-2 border-late4-teal bg-white text-sm font-extrabold text-late4-ink shadow-lg shadow-late4-teal/10">
-                {step.number}
-              </div>
-              <h3 className="mt-6 text-sm font-extrabold text-late4-ink">{step.title}</h3>
-              <p className="mx-auto mt-2 max-w-[150px] text-xs leading-relaxed text-late4-slate">{step.description}</p>
-            </article>
-          ))}
+        <div className="mt-14 grid gap-5 md:grid-cols-4">
+          {steps.map((step) => {
+            const Icon = step.icon;
+            return (
+              <article
+                key={step.number}
+                className={`rounded-xl border p-6 ${
+                  step.highlight ? 'border-l4-green/40 bg-l4-green-soft' : 'border-l4-line bg-white'
+                }`}
+              >
+                <span
+                  className={`inline-flex h-7 w-7 items-center justify-center rounded-md font-mono text-[11px] font-bold ${
+                    step.highlight ? 'bg-l4-green text-white' : 'bg-l4-surface text-l4-muted'
+                  }`}
+                >
+                  {step.number}
+                </span>
+                <h3 className="mt-6 flex items-center gap-2 text-base font-bold tracking-tight text-l4-night">
+                  <Icon size={16} className={step.highlight ? 'text-l4-green' : 'text-l4-blue'} />
+                  {step.title}
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-l4-muted">{step.description}</p>
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>

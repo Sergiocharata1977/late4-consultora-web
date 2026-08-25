@@ -9,6 +9,19 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // Paleta del rediseno (landing)
+        'l4-blue': '#1652F0',
+        'l4-blue-dark': '#0F3CC4',
+        'l4-blue-soft': '#EEF3FF',
+        'l4-green': '#12A150',
+        'l4-green-soft': '#E9F7EF',
+        'l4-night': '#0B1220',
+        'l4-muted': '#5B6572',
+        'l4-line': '#E4E7EC',
+        'l4-surface': '#F1F3F5',
+        'l4-band': '#E8EAED',
+
+        // Paleta previa (en uso por el CRM interno)
         'late4-ink': '#061D34',
         'late4-blue-deep': '#03182B',
         'late4-blue': '#0B4A63',
@@ -27,8 +40,8 @@ const config: Config = {
         'late4-white': '#FFFFFF',
       },
       fontFamily: {
-        sans: ['var(--font-inter)'],
-        serif: ['var(--font-serif)'],
+        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-mono)', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
       maxWidth: {
         '8xl': '88rem',

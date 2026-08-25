@@ -1,13 +1,14 @@
 import type { Metadata } from 'next';
-import { Inter, Source_Serif_4 } from 'next/font/google';
+import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
-const sourceSerif = Source_Serif_4({ subsets: ['latin'], variable: '--font-serif' });
+const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' });
 
 export const metadata: Metadata = {
-  title: 'Late 4 Consultora | Procesos, Calidad y Tecnología',
-  description: 'Consultoría administrativa, implementación ISO 9001, digitalización de procesos y desarrollo de software para PyMEs.',
+  title: 'Late4 Consultora | Gestión integrada: procesos, costos, calidad y tecnología',
+  description:
+    'Transformamos la información dispersa en planillas Excel, ERP, CRM y correos en un sistema de gestión único. Contabilidad de costos, ISO 9001, software a medida e IA para PyMEs.',
 };
 
 export default function RootLayout({
@@ -17,7 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body className={`${inter.variable} ${sourceSerif.variable} bg-late4-ink text-late4-ivory antialiased`}>
+      <body className={`${inter.variable} ${jetbrainsMono.variable} bg-white text-l4-night antialiased`}>
         {children}
       </body>
     </html>
