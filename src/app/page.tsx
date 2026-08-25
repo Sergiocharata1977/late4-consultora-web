@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { ArrowRight, Mail, Phone } from 'lucide-react';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
@@ -57,20 +56,11 @@ export default function Home() {
               </a>
             </div>
 
-            <div className="mt-10 flex items-center gap-4 border-t border-l4-line pt-6">
-              <Image
-                src="/images/sergio-defilippi-hero.png"
-                alt="Cont. Sergio Javier De Filippi"
-                width={1130}
-                height={1414}
-                className="h-14 w-14 shrink-0 rounded-full border border-l4-line bg-white object-cover object-top"
-              />
-              <div>
-                <p className="text-sm font-bold text-l4-night">Cont. Sergio Javier De Filippi</p>
-                <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.12em] text-l4-muted">
-                  Contador Público · Maestrando en Ingeniería de la Calidad
-                </p>
-              </div>
+            <div className="mt-10 border-t border-l4-line pt-6">
+              <p className="text-sm font-bold text-l4-night">Cont. Sergio Javier De Filippi</p>
+              <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.12em] text-l4-muted">
+                Contador Público · Maestrando en Ingeniería de la Calidad · Móvil 3731 511514
+              </p>
             </div>
           </div>
 
